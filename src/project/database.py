@@ -27,10 +27,6 @@ class Base(DeclarativeBase):
     pass
 
 
-class BaseGlobalify(DeclarativeBase):
-    pass
-
-
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     if os.getenv("APP_ENV") != "PROD":
