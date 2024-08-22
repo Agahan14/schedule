@@ -1,0 +1,25 @@
+{
+  "name": "schedule",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "css": "npx postcss ./src/project/static/src/input.css -o ./src/project/static/css/main.css --watch --verbose",
+    "html": "npx prettier --write './src/project/templates/**/*.html' --plugin=prettier-plugin-tailwindcss"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6"
+  },
+  "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.14",
+    "autoprefixer": "^10.4.20",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^3.4.10"
+  }
+}
