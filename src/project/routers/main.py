@@ -1,3 +1,4 @@
+# noinspection PyInterpreter
 import os
 
 from fastapi import (
