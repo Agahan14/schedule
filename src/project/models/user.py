@@ -11,7 +11,7 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     id: Mapped[int] = mapped_column(Integer, init=False, primary_key=True)
     email: str = mapped_column(String(255), unique=True, nullable=False)
     password: str = mapped_column(String(255), nullable=False)
-    username: Mapped[str] = mapped_column(String, nullable=True, unique=True)
+    username: Mapped[str] = mapped_column(String, nullable=True, unique=True, default=None)
     picture_url: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     first_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)

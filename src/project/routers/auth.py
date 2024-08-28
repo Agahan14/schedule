@@ -40,7 +40,8 @@ async def post_register_user(
         return HTMLResponse(content="Passwords do not match.", status_code=400)
     hashed_password = hash_password(password)
     try:
-        new_user = User(email=email, password=hashed_password)
+        new_user = User(email=email,
+                        password=hashed_password)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
