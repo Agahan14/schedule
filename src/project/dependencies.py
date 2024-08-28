@@ -5,6 +5,7 @@ from sqlalchemy import exc, select
 from sqlalchemy.orm import Session, sessionmaker
 from itsdangerous import BadSignature, URLSafeTimedSerializer, SignatureExpired
 from starlette import status
+from authlib.integrations.starlette_client import OAuth
 
 from .database import engine
 
@@ -86,3 +87,19 @@ def get_user_from_session(cookie_value: str, db: Session):
         return user
     except (BadSignature, SignatureExpired):
         raise HTTPException(status_code=401, detail="Invalid or expired session")
+
+
+oauth = OAuth()
+oauth_config_google: dict = {
+    "OAUTH2_CLIENT_ID": str(os.getenv("_GOOGLE_OAUTH2_CLIENT_ID")),
+    "OAUTH2_CLIENT_SECRET": str(os.getenv("_GOOGLE_OAUTH2_CLIENT_SECRET")),
+    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
+}
+
+oauth.register(
+    name="google",
+    client_id=oauth_config_google.get("OAUTH2_CLIENT_ID"),
+    client_secret=oauth_config_google.get("OAUTH2_CLIENT_SECRET"),
+    server_metadata_url=oauth_config_google.get("OAUTH2_META_URL"),
+    client_kwargs={"scope": "openid email profile"},
+)
