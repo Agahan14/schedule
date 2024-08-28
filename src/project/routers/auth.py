@@ -6,13 +6,13 @@ from fastapi import (
     Request, Depends, Form, HTTPException,
 )
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse, HTMLResponse
 
-from src.project.dependencies import get_db_session, login_user
-from src.project.models.user import User
-from src.utils import hash_password, pwd_context
+from ..dependencies import get_db_session, login_user, get_user_from_session
+from ..models.user import User
+from ...utils import hash_password, pwd_context
 from fastapi import Response
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -61,18 +61,40 @@ async def login(
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],
         db: Session = Depends(get_db_session)) -> Response:
-    user = User.get_by_email(db, email)
-
+    try:
+        user = User.get_by_email(db, email)
+    except NoResultFound:
+        raise HTTPException(status_code=400, detail="Invalid email or password")
     if not user:
         raise HTTPException(status_code=400, detail="Invalid email or password")
     if not pwd_context.verify(password, user.password):
         raise HTTPException(status_code=400, detail="Invalid email or password")
-    response = login_user(user=user, redirect_url="/")
+
+    response = login_user(user=user, redirect_url="/auth/get_authenticated_page")
     return response
 
 
-# @router.get("/logout")
-# async def logout(request: Request, response: Response) -> Response:
-#     response = RedirectResponse(url="/")
-#     response.delete_cookie(key="session")
-#     return response
+#For now it returns page for authenticated person
+@router.get("/get_authenticated_page", tags=["auth"], response_class=HTMLResponse)
+async def get_authenticated_page(
+        request: Request,
+        db: Session = Depends(get_db_session)
+) -> HTMLResponse:
+    # Get the session cookie
+    cookie_value = request.cookies.get("sess")
+    if not cookie_value:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    # Retrieve the user from the session
+    user = get_user_from_session(cookie_value, db)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
+
+    # Pass the user to the template
+    return templates.TemplateResponse("/authenticated_index.html", {"request": request, "user": user})
+
+@router.get("/logout")
+async def logout(request: Request, response: Response) -> Response:
+    response = RedirectResponse(url="/")
+    response.delete_cookie(key="sess")
+    return response

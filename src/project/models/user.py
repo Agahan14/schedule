@@ -1,11 +1,8 @@
-from typing import Optional
-
-from sqlalchemy import Column, String, Integer, select
+from sqlalchemy import String, Integer, select
 from sqlalchemy.orm import MappedAsDataclass, Mapped, mapped_column, Session
 from sqlalchemy.testing.pickleable import User
-
-from src.project.database import Base
 from collections.abc import Sequence
+from ..database import Base
 
 
 class User(MappedAsDataclass, Base):

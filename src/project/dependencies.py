@@ -9,8 +9,6 @@ from starlette import status
 from .database import engine
 
 from fastapi import (
-    APIRouter,
-    Depends,
     HTTPException,
     Request,
     Response,
