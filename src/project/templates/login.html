@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Login</h1>
-    <form method="post" action="/auth/login">
+    <form method="post" action="/login">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
         <br>
@@ -13,6 +13,13 @@
         <input type="password" id="password" name="password" required>
         <br>
         <button type="submit">Login</button>
+    </form>
+    <hr>
+
+    <form method="get" action="/google_login">
+        <button type="submit" style="background-color: #4285F4; color: white;">
+            Login with Google
+        </button>
     </form>
 </body>
 </html>

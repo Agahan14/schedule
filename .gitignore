@@ -403,4 +403,4 @@ typesense-data
 *.sqlite
 database.db
 
-_env.
+.env

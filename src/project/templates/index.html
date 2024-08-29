@@ -1,31 +1,53 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Hello world</title>
-        <link rel="stylesheet" href="/static/css/main.css" />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello world</title>
+    <link rel="stylesheet" href="/static/css/main.css" />
 
-        <!-- Vue -->
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-        <script src="/static/vue/base.js" defer></script>
-        <script src="/static/vue/main.js" defer></script>
-    </head>
-    <!-- prettier-ignore -->
-    {% import "components/test.html" as test %} 
-    {{ test.render() }}
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/static/vue/base.js" defer></script>
+    <script src="/static/vue/main.js" defer></script>
+    <style>
+        .login-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
 
-    <body class="h-full overflow-x-clip" id="app">
-        <transition enter-active-class="animate-fade-in" leave-active-class="animate-fade-out">
-            <div class="fixed top-0 z-50 h-full w-full bg-black/60" v-if="testOpened"></div>
-        </transition>
-        <transition enter-active-class="animate-fade-in" leave-active-class="animate-fade-out">
-            <test-component v-if="testOpened" @close-test="testOpened = null"></test-component
-        ></transition>
-        <div class="flex flex-col border-2">
-            <h1 class="">Hello world</h1>
-            <p>Welcome to your new project!</p>
-        </div>
-        <button class="w-full bg-sky-500" @click="testOpened = true">Show test</button>
-    </body>
+        .login-button {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<!-- prettier-ignore -->
+{% import "components/test.html" as test %}
+{{ test.render() }}
+
+<body class="h-full overflow-x-clip" id="app">
+<transition enter-active-class="animate-fade-in" leave-active-class="animate-fade-out">
+    <div class="fixed top-0 z-50 h-full w-full bg-black/60" v-if="testOpened"></div>
+</transition>
+<transition enter-active-class="animate-fade-in" leave-active-class="animate-fade-out">
+    <test-component v-if="testOpened" @close-test="testOpened = null"></test-component>
+</transition>
+<div class="flex flex-col border-2">
+    <h1 class="">Hello world</h1>
+    <p>Welcome to your new project!</p>
+</div>
+<button class="w-full bg-sky-500" @click="testOpened = true">Show test</button>
+
+<!-- Login Button -->
+<div class="login-container">
+    <form method="get" action="/login">
+        <button type="submit" class="login-button">Login</button>
+    </form>
+</div>
+</body>
 </html>
