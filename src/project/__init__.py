@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from .database import lifespan
-from .routers import main
+from .routers import main, auth
 
 
 def create_app() -> FastAPI:
@@ -42,6 +42,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(main.router)
+    app.include_router(auth.router)
 
     return app
 

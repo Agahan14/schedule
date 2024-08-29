@@ -402,3 +402,5 @@ typesense-data
 .DS_Store
 *.sqlite
 database.db
+
+_env.

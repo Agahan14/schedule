@@ -13,8 +13,8 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import Mapped, MappedAsDataclass, mapped_column, relationship
 
-from project.database import Base
-from project.utils.enums import TimeType, WeekDay
+from ..database import Base
+from ..utils.enums import WeekDay, TimeType
 
 
 class WorkSchedule(Base):
