@@ -29,7 +29,7 @@ async def get_register_user(request: Request) -> HTMLResponse:
 
 
 #Post view for user registration
-@router.post("/post_register", tags=["auth"], response_class=HTMLResponse)
+@router.post("/register", tags=["auth"], response_class=HTMLResponse)
 async def post_register_user(
         request: Request,
         email: Annotated[str, Form()],
@@ -57,7 +57,7 @@ async def login(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("/login.html", {"request": request})
 
 #Post view for user login
-@router.post("/post_login", tags=["auth"], response_class=HTMLResponse)
+@router.post("/login", tags=["auth"], response_class=HTMLResponse)
 async def login(
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],

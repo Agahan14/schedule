@@ -21,16 +21,16 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
         return f"<User(id={self.id}, email={self.email})>"
 
     @staticmethod
-    def get_all(session_schedule: Session) -> Sequence[User]:
-        return (session_schedule.scalars(select(User))).all()
+    def get_all(session: Session) -> Sequence[User]:
+        return (session.scalars(select(User))).all()
 
     @staticmethod
-    def get_by_id(session_schedule: Session, id: int) -> User | None:
-        return session_schedule.scalar(select(User).where(User.id == int(id)))
+    def get_by_id(session: Session, id: int) -> User | None:
+        return session.scalar(select(User).where(User.id == int(id)))
 
     @staticmethod
-    def get_by_email(session_schedule: Session, email: str) -> User | None:
-        return session_schedule.scalar(select(User).where(User.email == email))
+    def get_by_email(session: Session, email: str) -> User | None:
+        return session.scalar(select(User).where(User.email == email))
 
     @property
     def full_name(self) -> str:
