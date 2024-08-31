@@ -27,18 +27,20 @@ router = APIRouter()
 
 #Gets register template
 @router.get("/register", tags=["auth"], response_class=HTMLResponse)
-async def get_register_user(request: Request) -> HTMLResponse:
+async def register_user(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("register.html", {"request": request})
 
 
 #Post view for user registration
 @router.post("/register", tags=["auth"], response_class=HTMLResponse)
-async def post_register_user(
+async def register_user(
         request: Request,
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],
         confirm_password: Annotated[str, Form()],
         db: Session = Depends(get_db_session)) -> RedirectResponse:
+    if not password:
+        return HTMLResponse(content="Password is required.", status_code=400)
     if password != confirm_password:
         return HTMLResponse(content="Passwords do not match.", status_code=400)
     hashed_password = hash_password(password)
@@ -75,10 +77,6 @@ async def login(
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
     user_data = {"id": user.id, "email": user.email}
-
-    print("Hello world")
-
-
     response = login_user(user=user_data, redirect_url="/get_authenticated_page")
     return response
 
@@ -110,18 +108,22 @@ async def logout(request: Request, response: Response) -> Response:
     return response
 
 #Google Authentication
-def oauth_user(
-    email: str,
-    oauth_provider: OauthProvider,
-    session: Session,
-):
-    user = User.get_by_email(session=session, email=email)
-    if not user:
-        raise UserDataError(status_code=303, detail="Please create an account first!")
-    if not user.is_verified:
-        raise UserDataError(status_code=303, detail="Please verify your email first!")
+def oauth_user(email: str, session: Session):
+    try:
+        user = User.get_by_email(session=session, email=email)
+        if not user:
+            user = User(email=email, is_google_account=True)
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+        return {"email": user.email}
 
-    return {"email": user.email}
+    except NoResultFound:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    except Exception as e:
+        session.rollback()  # Rollback in case of error
+        raise HTTPException(status_code=500, detail="Internal Server Error: " + str(e))
 
 
 @router.get("/google_login", tags=["auth"])
@@ -156,7 +158,6 @@ async def google_callback(
     try:
         user = oauth_user(
             email=email,
-            oauth_provider=OauthProvider.GOOGLE,
             session=session,
         )
     except UserDataError as e:
