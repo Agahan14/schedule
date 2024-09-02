@@ -7,10 +7,11 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
+    Boolean,
     select,
     func,
+    sql,
 )
-
 
 from sqlalchemy.orm import (
     Mapped,
@@ -39,6 +40,7 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     date: Mapped[datetime.datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False, init=False
     )
+    is_hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql.false(), init=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
     description: Mapped[str] = mapped_column(String, nullable=True, default=None)
 
