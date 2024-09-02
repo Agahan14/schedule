@@ -1,2 +1,20 @@
+AUTH_INVALID_EMAIL = "Please enter a valid email."
+AUTH_EMAIL_NOT_FOUND = "User associated with this email does not exist."
+AUTH_OAUTH_USED = "Please sign in with your OAuth provider."
+AUTH_FIELDS_INCOMPLETE = "Please fill out all fields."
+AUTH_USERNAME_USED = "Username is already in use."
+
+OAUTH_ACCESS_TOKEN = "Authentication failed. Could not authorize access token."
 OAUTH_NO_EMAIL = "Authentication failed. Could not get email."
+OAUTH_MISMATCHED_PROVIDER = "Authentication failed. Try using different authentication provider."
 OAUTH_NO_USER_INFO = "Authentication failed. Could not get user info."
+OAUTH_COULD_NOT_RETRIEVE_DATA = "Data could not be retrieved from the OAuth provider. Try again later."
+NOT_AUTHORIZED = "Oops! Looks like you aren't logged in"
+
+
+PASSWORD_REQUIRED = "Looks like you have not provided password."
+PASSWORDS_DO_NOT_MATCH = "Looks like passwords do not match!"
+EMAIL_ALREADY_REGISTERED = "Looks like you have been already registered. Please sign in!"
+GOOGLE_USER = "Looks like you are a Google User. Please sign in via Google!"
+USER_NOT_FOUND = "Looks like you have not been registred. Please register!"
+INCORRECT_PASSWORD = "Looks like you have entered incorrect password. Please enter valid password"

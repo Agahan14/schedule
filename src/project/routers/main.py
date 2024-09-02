@@ -1,6 +1,5 @@
 # noinspection PyInterpreter
 import os
-from typing import Annotated
 
 from fastapi import (
     APIRouter,

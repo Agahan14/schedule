@@ -2,6 +2,21 @@
 <html>
 <head>
     <title>Login</title>
+    <style>
+        .google-signin-button {
+            display: inline-block;
+            background-color: #4285F4;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Login</h1>
@@ -14,12 +29,7 @@
         <br>
         <button type="submit">Login</button>
     </form>
-    <hr>
 
-    <form method="get" action="/google_login">
-        <button type="submit" style="background-color: #4285F4; color: white;">
-            Login with Google
-        </button>
-    </form>
+    <a href="/google_login" class="google-signin-button">Sign in with Google</a>
 </body>
 </html>

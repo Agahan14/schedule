@@ -16,7 +16,8 @@ from ..models.user import User
 from ..utils.errors.errors import UserDataError, OauthProviderError
 from ..utils.additional_func_auth import hash_password, pwd_context
 from ..utils.enums import OauthProvider
-from ..utils.errors.error_messages import OAUTH_NO_EMAIL, OAUTH_NO_USER_INFO
+from ..utils.errors.error_messages import OAUTH_NO_EMAIL, OAUTH_NO_USER_INFO, PASSWORD_REQUIRED, PASSWORDS_DO_NOT_MATCH, \
+    EMAIL_ALREADY_REGISTERED, GOOGLE_USER, USER_NOT_FOUND, INCORRECT_PASSWORD
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(current_dir, "..", "templates")
@@ -39,20 +40,27 @@ async def register_user(
         password: Annotated[str, Form()],
         confirm_password: Annotated[str, Form()],
         db: Session = Depends(get_db_session)) -> RedirectResponse:
+
     if not password:
-        return HTMLResponse(content="Password is required.", status_code=400)
+        return HTMLResponse(content=PASSWORD_REQUIRED, status_code=400)
+
     if password != confirm_password:
-        return HTMLResponse(content="Passwords do not match.", status_code=400)
+        return HTMLResponse(content=PASSWORDS_DO_NOT_MATCH, status_code=400)
+
     hashed_password = hash_password(password)
     try:
         new_user = User(email=email,
-                        password=hashed_password)
+                        password=hashed_password,
+                        oauth_provider=OauthProvider.ORDINARY_USER
+                        )
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+        return RedirectResponse(url="/login", status_code=303)
     except IntegrityError:
         db.rollback()
-        return HTMLResponse(content="Email already registered.", status_code=400)
+        return HTMLResponse(content=EMAIL_ALREADY_REGISTERED, status_code=400)
+
     return RedirectResponse(url="/login", status_code=303)
 
 
@@ -67,19 +75,17 @@ async def login(
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],
         db: Session = Depends(get_db_session)) -> Response:
-    try:
+
         user = User.get_by_email(db, email)
-    except NoResultFound:
-        raise HTTPException(status_code=400, detail="Invalid email or password")
-    if not user:
-        raise HTTPException(status_code=400, detail="Invalid email or password")
-    if not pwd_context.verify(password, user.password):
-        raise HTTPException(status_code=400, detail="Invalid email or password")
-
-    user_data = {"id": user.id, "email": user.email}
-    response = login_user(user=user_data, redirect_url="/get_authenticated_page")
-    return response
-
+        if not user:
+            return HTMLResponse(content=USER_NOT_FOUND, status_code=400)
+        if user.oauth_provider == OauthProvider.GOOGLE:
+            return HTMLResponse(content=GOOGLE_USER, status_code=400)
+        if not pwd_context.verify(password, user.password):
+            raise HTTPException(status_code=400, detail=INCORRECT_PASSWORD)
+        user_data = {"id": user.id, "email": user.email}
+        response = login_user(user=user_data, redirect_url="/get_authenticated_page")
+        return response
 
 #For now it returns page for authenticated person
 @router.get("/get_authenticated_page", tags=["auth"], response_class=HTMLResponse)
@@ -107,12 +113,14 @@ async def logout(request: Request, response: Response) -> Response:
     response.delete_cookie(key="sess")
     return response
 
+
 #Google Authentication
-def oauth_user(email: str, session: Session):
+def oauth_user(email: str, oauth_provider: OauthProvider,  session: Session):
+
     try:
         user = User.get_by_email(session=session, email=email)
         if not user:
-            user = User(email=email, is_google_account=True)
+            user = User(email=email, oauth_provider=oauth_provider)
             session.add(user)
             session.commit()
             session.refresh(user)
@@ -159,11 +167,8 @@ async def google_callback(
         user = oauth_user(
             email=email,
             session=session,
+            oauth_provider=OauthProvider.GOOGLE
         )
-    except UserDataError as e:
-        return RedirectResponse(url=f"https://globalify.xyz/login?type=2&msg={e.detail}", status_code=e.status_code)
-    except OauthProviderError as e:
-        return RedirectResponse(url=f"/login?type=2&msg={e.detail}", status_code=e.status_code)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

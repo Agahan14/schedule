@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello world</title>
+    <link rel="stylesheet" href="/static/css/main.css" />
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/static/vue/base.js" defer></script>
+    <script src="/static/vue/main.js" defer></script>
+</head>
+<!-- prettier-ignore -->
+{#{% import "components/test.html" as test %}#}
+{#{{ test.render() }}#}
+
+<body class="h-full overflow-x-clip bg-black" id="app">
+    {% block content %}
+    <div>
+        <h1 class="font-mono text-white">Hello world</h1>
+    </div>
+
+
+    {% endblock %}
+</body>
+</html>

@@ -19,3 +19,4 @@ class TimeType(str, Enum):
 
 class OauthProvider(Enum):
     GOOGLE = "GOOGLE"
+    ORDINARY_USER = "ORDINARY_USER"

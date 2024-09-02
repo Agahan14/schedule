@@ -3,12 +3,15 @@ from sqlalchemy.orm import MappedAsDataclass, Mapped, mapped_column, Session
 from sqlalchemy.testing.pickleable import User
 from collections.abc import Sequence
 from ..database import Base
+from ..utils.enums import OauthProvider
+from sqlalchemy import Enum as SQLEnum
 
 
 class User(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(Integer, init=False, primary_key=True)
+    oauth_provider: Mapped[OauthProvider] = mapped_column(SQLEnum(OauthProvider))
     email: str = mapped_column(String(255), unique=True, nullable=True)
     password: str = mapped_column(String(255), nullable=True, default=None)
     username: Mapped[str] = mapped_column(String, nullable=True, unique=True, default=None)
@@ -16,7 +19,6 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     first_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
-    is_google_account: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"

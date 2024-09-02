@@ -56,15 +56,12 @@ def get_current_user(request: Request, session: Session) -> User | None:
 
 
 def login_user(user, redirect_url: str) -> Response:
-    # secure = os.getenv("APP_ENV") == "PROD"
-
     session_data = str(timed_serializer.dumps(user))
     response = RedirectResponse(url=redirect_url, status_code=302)
     response.set_cookie(
         key="sess",
         value=session_data,
         httponly=True,
-        # secure=secure,  # Set to True in a HTTPS environment
         max_age=SESSION_MAX_AGE,
         samesite="lax",
     )
