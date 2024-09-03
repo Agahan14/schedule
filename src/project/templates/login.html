@@ -1,35 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <style>
-        .google-signin-button {
-            display: inline-block;
-            background-color: #4285F4;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Login</h1>
-    <form method="post" action="/login">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
+{% extends "base.html" %}
 
-    <a href="/google_login" class="google-signin-button">Sign in with Google</a>
-</body>
-</html>
+
+{% block content %}
+
+    <div class="min-h-screen bg-black flex flex-col justify-center items-center">
+        <div class="mb-5">
+            <h2 class="text-white font-bold text-center text-3xl"> Hi there! Welcome! </h2>
+        </div>
+        <div
+            class="bg-gray-100 dark:bg-gray-700 border-gray-300 mx-4 my-6 w-2/6 h-auto rounded-md border px-6 py-12 sm:px-8">
+
+
+            <div class="bg-gray-100 dark:bg-gray-700 border-gray-300 mx-2 py-10 sm:px-10">
+
+                <h1 class="text-center mb-7 text-gray-50 font-bold text-3xl">Login</h1>
+
+                <div class="space-y-6">
+                    <form method="post" action="/login">
+                        <label for="email"
+                               class="text-emphasis mb-3 block text-sm font-medium leading-none text-white">Email
+                            address:</label>
+                        <input type="email"
+                               class="hover:border-emphasis dark:focus:border-emphasis border-default placeholder:text-muted ext-emphasis focus:ring-brand-default focus:border-subtle mb-2 rounded-md w-full h-8"
+                               id="email" name="email" required>
+                        <br>
+                        <label for="password"
+                               class="text-emphasis mb-3 block text-sm font-medium leading-none text-white">Password:</label>
+                        <input type="password"
+                               class="hover:border-emphasis dark:focus:border-emphasis border-default placeholder:text-muted ext-emphasis focus:ring-brand-default focus:border-subtle mb-2 rounded-md w-full h-8"
+                               id="password" name="password" required>
+                        <br>
+                        <button type="submit"
+                                class="w-full py-2 px-3 text-sm font-medium text-black bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mt-4">
+                            Login
+                        </button>
+                    </form>
+                </div>
+
+
+                <div class="mt-4 mb-4 w-full">
+                    <div class="mt-8 text-center text-sm w-full">
+                        <a href="/google_login"
+                           class="bg-blue-700 text-white text-m py-2 px-32 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                            Sign in with Google
+                        </a>
+                    </div>
+
+                    <div class="mt-8 text-center text-sm">
+                        <a href="/register"
+                           class="text-white font-medium">
+                            Don't have an account?
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
