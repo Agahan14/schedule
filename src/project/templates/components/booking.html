@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <h1 class="text-2xl font-bold mb-4">Bookings</h1>
+    <p class="text-gray-400 mb-6">See upcoming and past events booked through your event type links.</p>
+
+    <div class="mb-6">
+        <button class="bg-gray-700 text-white px-4 py-2 rounded-md mr-2">Upcoming</button>
+        <button class="text-gray-400 px-4 py-2 rounded-md mr-2">Unconfirmed</button>
+        <button class="text-gray-400 px-4 py-2 rounded-md mr-2">Recruring</button>
+        <button class="text-gray-400 px-4 py-2 rounded-md mr-2">Past</button>
+        <button class="text-gray-400 px-4 py-2 rounded-md">Canceled</button>
+    </div>
+
+    <div class="space-y-4">
+        {% for booking in bookings %}
+        <div class="bg-gray-800 p-4 rounded-lg flex justify-between items-center">
+            <div>
+                <div class="text-lg font-semibold">
+                    {{ booking.date.strftime('%a, %d %b') }}
+                </div>
+                <div class="text-gray-400">
+                    {{ booking.date.strftime('%H:%M') }} - {{ (booking.date + timedelta(minutes=booking.event.duration)).strftime('%H:%M') }}
+                </div>
+                <div class="text-blue-400 mt-1">
+                    <a href="{{ booking.meeting_url }}" target="_blank">Join Google Meet</a>
+                </div>
+                <div class="mt-2">
+                    15 Min Meeting between you and {{ booking.created_by }} 
+                </div>
+                <div class="text-gray-400">
+                    You and {{ booking.email }}
+                </div>
+            </div>
+            <div>
+                <button class="bg-gray-700 text-white px-4 py-2 rounded-md mr-2">Cancel event</button>
+                <button class="bg-gray-700 text-white px-4 py-2 rounded-md">Edit</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not bookings %}
+    <div class="text-gray-400 mt-4">You don't have any meetings yet</div>
+    {% endif %}
+</body>
+</html>
