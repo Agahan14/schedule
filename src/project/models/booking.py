@@ -50,26 +50,24 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     # additional_notes: Mapped[list[str]] = mapped_column(
     #     String, nullable=True, init=False
     # )
-    
+
     event: Mapped["Event"] = relationship(
         "Event", back_populates="bookings", default=False
     )
 
     @staticmethod
-    def delete_by_id(session_shedule: Session, id: int) -> None:
-        if booking := Booking.get_by_id(session_shedule=session_shedule, id=id):
-            session_shedule.delete(booking)
-            session_shedule.commit()
+    def delete_by_id(session: Session, id: int) -> None:
+        if booking := Booking.get_by_id(session=session, id=id):
+            session.delete(booking)
+            session.commit()
 
     @staticmethod
-    def get_by_id(session_shedule: Session, id: int) -> Booking | None:
-        return session_shedule.scalar(select(Booking).where(Booking.id == int(id)))
+    def get_by_id(session: Session, id: int) -> Booking | None:
+        return session.scalar(select(Booking).where(Booking.id == int(id)))
 
     @staticmethod
-    def get_all_by_user_id(
-        session_shedule: Session, user_id: int
-    ) -> Sequence[Booking] | None:
-        return session_shedule.scalars(
+    def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
+        return session.scalars(
             select(Booking)
             .where(
                 Booking.event_id.in_(select(Event.id).where(Event.user_id == user_id))
@@ -79,9 +77,9 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
 
     @staticmethod
     def get_all_canceld_by_user_id(
-        session_shedule: Session, user_id: int
+        session: Session, user_id: int
     ) -> Sequence[Booking] | None:
-        return session_shedule.scalars(
+        return session.scalars(
             select(Booking)
             .where(Booking.event_id.user_id == user_id, Booking.is_canceled._is(True))
             .order_by(desc(Booking.created_at))
@@ -89,9 +87,9 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
 
     @staticmethod
     def get_all_unconfirmed_by_user_id(
-        session_shedule: Session, user_id: int
+        session: Session, user_id: int
     ) -> Sequence[Booking] | None:
-        return session_shedule.scalars(
+        return session.scalars(
             select(Booking)
             .where(Booking.event_id.user_id == user_id, Booking.is_confirmed._is(False))
             .order_by(desc(Booking.created_at))
@@ -99,9 +97,9 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
 
     @staticmethod
     def get_all_upcoming_by_user_id(
-        session_shedule: Session, user_id: int
+        session: Session, user_id: int
     ) -> Sequence[Booking] | None:
-        return session_shedule.scalars(
+        return session.scalars(
             select(Booking)
             .where(
                 Booking.event_id.user_id == user_id, Booking.date > func.current_time()
@@ -111,9 +109,9 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
 
     @staticmethod
     def get_all_past_bookings_by_user_id(
-        session_shedule: Session, user_id: int
+        session: Session, user_id: int
     ) -> Sequence[Booking] | None:
-        return session_shedule.scalars(
+        return session.scalars(
             select(Booking)
             .where(
                 Booking.event_id.user_id == user_id, Booking.date < func.current_time()
