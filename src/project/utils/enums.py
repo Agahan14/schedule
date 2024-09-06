@@ -15,3 +15,8 @@ class TimeType(str, Enum):
     DAYS = "days"
     HOURS = "Hours"
     MINUTES = "Minutes"
+
+
+class OauthProvider(Enum):
+    GOOGLE = "GOOGLE"
+    ORDINARY_USER = "ORDINARY_USER"
