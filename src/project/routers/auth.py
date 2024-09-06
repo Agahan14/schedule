@@ -1,39 +1,40 @@
 import os
 from typing import Annotated
 from urllib.parse import urlsplit
+
 from fastapi import (
     APIRouter,
-    Request,
     Depends,
     Form,
     HTTPException,
+    Request,
+    Response,
 )
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
-from starlette.responses import RedirectResponse, HTMLResponse
-from fastapi import Response
+from starlette.responses import HTMLResponse, RedirectResponse
 
-from ..dependencies import get_db_session, login_user, get_user_from_session, oauth
+from ..dependencies import (
+    get_db_session,
+    get_user_from_session,
+    login_user,
+    oauth,
+    templates,
+)
 from ..models.user import User
-from ..utils.errors.errors import UserDataError
 from ..utils.additional_func_auth import hash_password, pwd_context
 from ..utils.enums import OauthProvider
 from ..utils.errors.error_messages import (
+    EMAIL_ALREADY_REGISTERED,
+    GOOGLE_USER,
+    INCORRECT_PASSWORD,
     OAUTH_NO_EMAIL,
     OAUTH_NO_USER_INFO,
     PASSWORD_REQUIRED,
     PASSWORDS_DO_NOT_MATCH,
-    EMAIL_ALREADY_REGISTERED,
-    GOOGLE_USER,
     USER_NOT_FOUND,
-    INCORRECT_PASSWORD,
 )
-
-current_dir = os.path.dirname(os.path.realpath(__file__))
-template_dir = os.path.join(current_dir, "..", "templates")
-
-templates = Jinja2Templates(directory=template_dir)
+from ..utils.errors.errors import UserDataError
 
 router = APIRouter()
 

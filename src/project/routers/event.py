@@ -2,9 +2,8 @@ import requests
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 
-from ..models import Event
-
 from ..dependencies import get_db_session, templates
+from ..models import Event
 
 router = APIRouter(prefix="/event")
 
