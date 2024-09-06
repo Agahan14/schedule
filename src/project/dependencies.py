@@ -1,21 +1,21 @@
 import os
 from collections.abc import Generator
 from datetime import timedelta
-from sqlalchemy import exc, select
-from sqlalchemy.orm import Session, sessionmaker
-from itsdangerous import BadSignature, URLSafeTimedSerializer, SignatureExpired
-from starlette import status
+
 from authlib.integrations.starlette_client import OAuth
-
-from .database import engine
-
 from fastapi import (
     HTTPException,
     Request,
     Response,
 )
 from fastapi.responses import RedirectResponse
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
+from sqlalchemy import exc, select
+from sqlalchemy.orm import Session, sessionmaker
+from starlette import status
+from starlette.templating import Jinja2Templates
 
+from .database import engine
 from .models.user import User
 
 
@@ -48,9 +48,13 @@ def get_current_user(request: Request, session: Session) -> User | None:
         user = timed_serializer.loads(session_cookie, max_age=SESSION_MAX_AGE)
         db_user = User.get_by_email(session=session, email=user["email"])
         if not db_user:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session"
+            )
     except BadSignature:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session"
+        )
 
     return db_user
 
@@ -79,7 +83,9 @@ def get_user_from_session(cookie_value: str, db: Session):
         user = db.scalars(stmt).one_or_none()
 
         if not user:
-            raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
+            raise HTTPException(
+                status_code=401, detail="Invalid session or user does not exist"
+            )
 
         return user
     except (BadSignature, SignatureExpired):
@@ -100,3 +106,8 @@ oauth.register(
     server_metadata_url=oauth_config_google.get("OAUTH2_META_URL"),
     client_kwargs={"scope": "openid email profile"},
 )
+
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+template_dir = os.path.join(current_dir, ".", "templates")
+templates = Jinja2Templates(directory=template_dir)
