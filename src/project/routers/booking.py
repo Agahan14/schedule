@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
 from ..dependencies import get_current_user, get_db_session
-from ..models.booking import Booking
+from ..models import Booking
 
 router = APIRouter(prefix="/booking")
 
