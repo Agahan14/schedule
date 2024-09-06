@@ -1,12 +1,19 @@
+import os
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+from starlette.templating import Jinja2Templates
 
-from ..dependencies import get_current_user, get_db_session, templates
+from ..dependencies import get_current_user, get_db_session
 from ..models.booking import Booking
 
 router = APIRouter(prefix="/booking")
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+template_dir = os.path.join(current_dir, "..", "templates")
+
+templates = Jinja2Templates(directory=template_dir)
 
 
 @router.get("/", tags=["booking"])
