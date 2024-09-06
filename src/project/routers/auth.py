@@ -13,7 +13,7 @@ from fastapi import Response
 
 from ..dependencies import get_db_session, login_user, get_user_from_session, oauth
 from ..models.user import User
-from ..utils.errors.errors import UserDataError, OauthProviderError
+from ..utils.errors.errors import UserDataError
 from ..utils.additional_func_auth import hash_password, pwd_context
 from ..utils.enums import OauthProvider
 from ..utils.errors.error_messages import OAUTH_NO_EMAIL, OAUTH_NO_USER_INFO, PASSWORD_REQUIRED, PASSWORDS_DO_NOT_MATCH, \
@@ -28,13 +28,13 @@ router = APIRouter()
 
 #Gets register template
 @router.get("/register", tags=["auth"], response_class=HTMLResponse)
-async def register_user(request: Request) -> HTMLResponse:
+async def get_register_user(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("register.html", {"request": request})
 
 
 #Post view for user registration
 @router.post("/register", tags=["auth"], response_class=HTMLResponse)
-async def register_user(
+async def post_register_user(
         request: Request,
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],
@@ -61,17 +61,16 @@ async def register_user(
         db.rollback()
         return HTMLResponse(content=EMAIL_ALREADY_REGISTERED, status_code=400)
 
-    return RedirectResponse(url="/login", status_code=303)
 
 
 #Gets login template
 @router.get("/login", tags=["auth"], response_class=HTMLResponse)
-async def login(request: Request) -> HTMLResponse:
+async def get_login(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("/login.html", {"request": request})
 
 #Post view for user login
 @router.post("/login", tags=["auth"], response_class=HTMLResponse)
-async def login(
+async def post_login(
         email: Annotated[str, Form()],
         password: Annotated[str, Form()],
         db: Session = Depends(get_db_session)) -> Response:
