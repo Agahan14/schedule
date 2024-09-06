@@ -4,9 +4,8 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
-from ..models import Event
-
 from ..dependencies import get_db_session
+from ..models import Event
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(current_dir, "..", "templates")
