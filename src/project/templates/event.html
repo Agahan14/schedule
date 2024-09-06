@@ -1,0 +1,24 @@
+<!-- templates/events.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+    <h1>Events List</h1>
+    <ul>
+        {% for event in events %}
+        <li>
+            <strong>Title:</strong> {{ event.title }} <br>
+            <strong>URL:</strong> <a href="{{ event.url }}">{{ event.url }}</a> <br>
+            <strong>Location URL:</strong> <a href="{{ event.location_url }}">{{ event.location_url }}</a> <br>
+            <strong>Date:</strong> {{ event.date.strftime('%Y-%m-%d %H:%M') }} <br>
+            <strong>Duration (minutes):</strong> {{ event.duration }} <br>
+            <strong>Description:</strong> {{ event.description if event.description else 'N/A' }}
+        </li>
+        <br>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hello world</title>
-        <link rel="stylesheet" href="/static/css/main.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
 
         <!-- Vue -->
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -12,7 +12,7 @@
         <script src="/static/vue/main.js" defer></script>
     </head>
     <!-- prettier-ignore -->
-    {% import "components/test.html" as test %} 
+    {% import "components/test.html" as test %}
     {{ test.render() }}
 
     <body class="h-full overflow-x-clip" id="app">
@@ -20,12 +20,19 @@
             <div class="fixed top-0 z-50 h-full w-full bg-black/60" v-if="testOpened"></div>
         </transition>
         <transition enter-active-class="animate-fade-in" leave-active-class="animate-fade-out">
-            <test-component v-if="testOpened" @close-test="testOpened = null"></test-component
-        ></transition>
-        <div class="flex flex-col border-2">
-            <h1 class="">Hello world</h1>
-            <p>Welcome to your new project!</p>
+            <test-component v-if="testOpened" @close-test="testOpened = null"></test-component>
+        </transition>
+        <div class="flex flex-col border-2 gap-16">
+            <h1 class="text-blue-800">world</h1>
+            <p class="mt-11">Welcome to your new project!</p>
         </div>
-        <button class="w-full bg-sky-500" @click="testOpened = true">Show test</button>
+        <button class="w-full text-white bg-sky-500" @click="testOpened = true">Show test</button>
+
+        <!-- Login Button -->
+        <div class="bg-sky-500">
+            <form method="get" action="/login">
+                <button type="submit" class="login-button">Login</button>
+            </form>
+        </div>
     </body>
 </html>

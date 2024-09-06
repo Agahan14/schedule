@@ -1,4 +1,5 @@
 [tool.poetry]
+package-mode = false
 name = "schedule"
 version = "0.1.0"
 description = ""
@@ -18,6 +19,7 @@ python-multipart = "^0.0.9"
 passlib = "^1.7.4"
 bcrypt = "^4.2.0"
 httpx = "^0.27.2"
+ruff = "^0.6.4"
 
 
 [build-system]
