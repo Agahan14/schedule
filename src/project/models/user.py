@@ -1,10 +1,12 @@
-from sqlalchemy import String, Integer, select, Boolean
-from sqlalchemy.orm import MappedAsDataclass, Mapped, mapped_column, Session
-from sqlalchemy.testing.pickleable import User
 from collections.abc import Sequence
+
+from sqlalchemy import Boolean, Integer, String, select
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
+from sqlalchemy.testing.pickleable import User
+
 from ..database import Base
 from ..utils.enums import OauthProvider
-from sqlalchemy import Enum as SQLEnum
 
 
 class User(MappedAsDataclass, Base, unsafe_hash=True):
@@ -14,7 +16,9 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     oauth_provider: Mapped[OauthProvider] = mapped_column(SQLEnum(OauthProvider))
     email: str = mapped_column(String(255), unique=True, nullable=True)
     password: str = mapped_column(String(255), nullable=True, default=None)
-    username: Mapped[str] = mapped_column(String, nullable=True, unique=True, default=None)
+    username: Mapped[str] = mapped_column(
+        String, nullable=True, unique=True, default=None
+    )
     picture_url: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     first_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
