@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from typing import List
 
 from sqlalchemy import (
     DateTime,
@@ -17,7 +18,7 @@ from sqlalchemy.orm import (
     Mapped,
     MappedAsDataclass,
     Session,
-    mapped_column,
+    mapped_column, relationship,
 )
 
 from ..database import Base
@@ -34,6 +35,9 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         unique=True,
         init=False,
     )
+    bookings: Mapped[list["Booking"]] = relationship(
+        "Booking", back_populates="event", cascade="all, delete-orphan"
+    )
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
     location_url: Mapped[str] = mapped_column(String, nullable=False)
@@ -43,6 +47,7 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     is_hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql.false(), init=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
     description: Mapped[str] = mapped_column(String, nullable=True, default=None)
+
 
     @staticmethod
     def get_by_id(session: Session, event_id: int) -> Event | None:
