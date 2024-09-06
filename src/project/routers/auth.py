@@ -3,7 +3,10 @@ from typing import Annotated
 from urllib.parse import urlsplit
 from fastapi import (
     APIRouter,
-    Request, Depends, Form, HTTPException,
+    Request,
+    Depends,
+    Form,
+    HTTPException,
 )
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.exc import IntegrityError, NoResultFound
@@ -16,8 +19,16 @@ from ..models.user import User
 from ..utils.errors.errors import UserDataError
 from ..utils.additional_func_auth import hash_password, pwd_context
 from ..utils.enums import OauthProvider
-from ..utils.errors.error_messages import OAUTH_NO_EMAIL, OAUTH_NO_USER_INFO, PASSWORD_REQUIRED, PASSWORDS_DO_NOT_MATCH, \
-    EMAIL_ALREADY_REGISTERED, GOOGLE_USER, USER_NOT_FOUND, INCORRECT_PASSWORD
+from ..utils.errors.error_messages import (
+    OAUTH_NO_EMAIL,
+    OAUTH_NO_USER_INFO,
+    PASSWORD_REQUIRED,
+    PASSWORDS_DO_NOT_MATCH,
+    EMAIL_ALREADY_REGISTERED,
+    GOOGLE_USER,
+    USER_NOT_FOUND,
+    INCORRECT_PASSWORD,
+)
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(current_dir, "..", "templates")
@@ -26,21 +37,22 @@ templates = Jinja2Templates(directory=template_dir)
 
 router = APIRouter()
 
-#Gets register template
+
+# Gets register template
 @router.get("/register", tags=["auth"], response_class=HTMLResponse)
 async def get_register_user(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("register.html", {"request": request})
 
 
-#Post view for user registration
+# Post view for user registration
 @router.post("/register", tags=["auth"], response_class=HTMLResponse)
 async def post_register_user(
-        request: Request,
-        email: Annotated[str, Form()],
-        password: Annotated[str, Form()],
-        confirm_password: Annotated[str, Form()],
-        db: Session = Depends(get_db_session)) -> RedirectResponse:
-
+    request: Request,
+    email: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    confirm_password: Annotated[str, Form()],
+    db: Session = Depends(get_db_session),
+) -> RedirectResponse:
     if not password:
         return HTMLResponse(content=PASSWORD_REQUIRED, status_code=400)
 
@@ -49,10 +61,11 @@ async def post_register_user(
 
     hashed_password = hash_password(password)
     try:
-        new_user = User(email=email,
-                        password=hashed_password,
-                        oauth_provider=OauthProvider.ORDINARY_USER
-                        )
+        new_user = User(
+            email=email,
+            password=hashed_password,
+            oauth_provider=OauthProvider.ORDINARY_USER,
+        )
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -62,35 +75,35 @@ async def post_register_user(
         return HTMLResponse(content=EMAIL_ALREADY_REGISTERED, status_code=400)
 
 
-
-#Gets login template
+# Gets login template
 @router.get("/login", tags=["auth"], response_class=HTMLResponse)
 async def get_login(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("/login.html", {"request": request})
 
-#Post view for user login
+
+# Post view for user login
 @router.post("/login", tags=["auth"], response_class=HTMLResponse)
 async def post_login(
-        email: Annotated[str, Form()],
-        password: Annotated[str, Form()],
-        db: Session = Depends(get_db_session)) -> Response:
+    email: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    db: Session = Depends(get_db_session),
+) -> Response:
+    user = User.get_by_email(db, email)
+    if not user:
+        return HTMLResponse(content=USER_NOT_FOUND, status_code=400)
+    if user.oauth_provider == OauthProvider.GOOGLE:
+        return HTMLResponse(content=GOOGLE_USER, status_code=400)
+    if not pwd_context.verify(password, user.password):
+        raise HTTPException(status_code=400, detail=INCORRECT_PASSWORD)
+    user_data = {"id": user.id, "email": user.email}
+    response = login_user(user=user_data, redirect_url="/get_authenticated_page")
+    return response
 
-        user = User.get_by_email(db, email)
-        if not user:
-            return HTMLResponse(content=USER_NOT_FOUND, status_code=400)
-        if user.oauth_provider == OauthProvider.GOOGLE:
-            return HTMLResponse(content=GOOGLE_USER, status_code=400)
-        if not pwd_context.verify(password, user.password):
-            raise HTTPException(status_code=400, detail=INCORRECT_PASSWORD)
-        user_data = {"id": user.id, "email": user.email}
-        response = login_user(user=user_data, redirect_url="/get_authenticated_page")
-        return response
 
-#For now it returns page for authenticated person
+# For now it returns page for authenticated person
 @router.get("/get_authenticated_page", tags=["auth"], response_class=HTMLResponse)
 async def get_authenticated_page(
-        request: Request,
-        db: Session = Depends(get_db_session)
+    request: Request, db: Session = Depends(get_db_session)
 ) -> HTMLResponse:
     # Get the session cookie
     cookie_value = request.cookies.get("sess")
@@ -100,10 +113,14 @@ async def get_authenticated_page(
     # Retrieve the user from the session
     user = get_user_from_session(cookie_value, db)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
+        raise HTTPException(
+            status_code=401, detail="Invalid session or user does not exist"
+        )
 
     # Pass the user to the template
-    return templates.TemplateResponse("/authenticated_index.html", {"request": request, "user": user})
+    return templates.TemplateResponse(
+        "/authenticated_index.html", {"request": request, "user": user}
+    )
 
 
 @router.get("/logout")
@@ -113,9 +130,8 @@ async def logout(request: Request, response: Response) -> Response:
     return response
 
 
-#Google Authentication
-def oauth_user(email: str, oauth_provider: OauthProvider,  session: Session):
-
+# Google Authentication
+def oauth_user(email: str, oauth_provider: OauthProvider, session: Session):
     try:
         user = User.get_by_email(session=session, email=email)
         if not user:
@@ -144,7 +160,9 @@ async def google_login(request: Request):
         },
         receive=request._receive,
     )
-    return await oauth.google.authorize_redirect(https_request, redirect_uri=https_request.url_for("google_callback"))
+    return await oauth.google.authorize_redirect(
+        https_request, redirect_uri=https_request.url_for("google_callback")
+    )
 
 
 @router.get("/google-oauth", tags=["auth"])
@@ -164,9 +182,7 @@ async def google_callback(
         raise UserDataError(status_code=303, detail=OAUTH_NO_EMAIL)
     try:
         user = oauth_user(
-            email=email,
-            session=session,
-            oauth_provider=OauthProvider.GOOGLE
+            email=email, session=session, oauth_provider=OauthProvider.GOOGLE
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
