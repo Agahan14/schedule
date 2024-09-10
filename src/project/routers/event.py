@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
