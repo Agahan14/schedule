@@ -16,10 +16,10 @@ from starlette.responses import HTMLResponse, RedirectResponse
 
 from ..dependencies import (
     get_db_session,
-    get_user_from_session,
     login_user,
     oauth,
     templates,
+    get_current_user, get_user_from_session,
 )
 from ..models.user import User
 from ..utils.additional_func_auth import hash_password, pwd_context
@@ -97,15 +97,13 @@ async def post_login(
     if not pwd_context.verify(password, user.password):
         raise HTTPException(status_code=400, detail=INCORRECT_PASSWORD)
     user_data = {"id": user.id, "email": user.email}
-    response = login_user(user=user_data, redirect_url="/get_authenticated_page")
+    response = login_user(user=user_data, redirect_url="/index")
     return response
 
 
 # For now it returns page for authenticated person
 @router.get("/get_authenticated_page", tags=["auth"], response_class=HTMLResponse)
-async def get_authenticated_page(
-    request: Request, db: Session = Depends(get_db_session)
-) -> HTMLResponse:
+async def get_authenticated_page(request: Request, db: Session = Depends(get_db_session)) -> HTMLResponse:
     # Get the session cookie
     cookie_value = request.cookies.get("sess")
     if not cookie_value:
@@ -114,14 +112,10 @@ async def get_authenticated_page(
     # Retrieve the user from the session
     user = get_user_from_session(cookie_value, db)
     if not user:
-        raise HTTPException(
-            status_code=401, detail="Invalid session or user does not exist"
-        )
+        raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
 
     # Pass the user to the template
-    return templates.TemplateResponse(
-        "/authenticated_index.html", {"request": request, "user": user}
-    )
+    return templates.TemplateResponse("/authenticated_index.html", {"request": request, "user": user})
 
 
 @router.get("/logout")
@@ -161,9 +155,7 @@ async def google_login(request: Request):
         },
         receive=request._receive,
     )
-    return await oauth.google.authorize_redirect(
-        https_request, redirect_uri=https_request.url_for("google_callback")
-    )
+    return await oauth.google.authorize_redirect(https_request, redirect_uri=https_request.url_for("google_callback"))
 
 
 @router.get("/google-oauth", tags=["auth"])
@@ -182,11 +174,43 @@ async def google_callback(
     if not email:
         raise UserDataError(status_code=303, detail=OAUTH_NO_EMAIL)
     try:
-        user = oauth_user(
-            email=email, session=session, oauth_provider=OauthProvider.GOOGLE
-        )
+        user = oauth_user(email=email, session=session, oauth_provider=OauthProvider.GOOGLE)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
     response = login_user(user=user, redirect_url="get_authenticated_page")
     return response
+
+
+@router.get("/index", tags=["auth"])
+async def get_index(request: Request, session: Session = Depends(get_db_session)):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@router.api_route("/settings", methods=["GET", "POST"], tags=["auth"], response_model=None)
+async def settings(
+    request: Request,
+    first_name: Annotated[str, Form()] = None,
+    last_name: Annotated[str, Form()] = None,
+    username: Annotated[str, Form()] = None,
+    email: Annotated[str, Form()] = None,
+    about: Annotated[str, Form()] = None,
+    db: Session = Depends(get_db_session),
+):
+    current_user = get_current_user(request, db)
+    if request.method == "GET":
+        return templates.TemplateResponse("settings.html", {"request": request, "user": current_user})
+    elif request.method == "POST":
+        try:
+            current_user.first_name = first_name
+            current_user.last_name = last_name
+            current_user.username = username
+            current_user.email = email
+            current_user.about = about
+            db.commit()
+        except Exception as e:
+            db.rollback()  # Rollback the transaction on error
+            return RedirectResponse(
+                url="/settings", status_code=303, headers={"X-Error": f"An error occurred while updating {e}"}
+            )
+        return RedirectResponse(url="/settings", status_code=303)
