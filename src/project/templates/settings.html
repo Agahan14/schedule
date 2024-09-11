@@ -1,30 +1,32 @@
 {% extends "base.html" %} {% block content %}
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-1/6 min-h-screen flex flex-col bg-zinc-900 text-white p-4">
-            <h2 class="text-xl font-bold my-2">Sidebar</h2>
-            <div class="flex h-10 bg-zinc-900 items-center rounded hover:bg-zinc-500">
-                <div class="m-2">
-                    {% if user.picture_url %}
-                        <img src="{{ user.picture_url }}" alt="Profile Image" class="w-8 h-8 rounded-full">
-                    {% else %}
-                        <img src="/static/images/profile_pictures/profile_picture.jpg" alt="Default Image"
-                             class="w-8 h-8 rounded-full">
-                    {% endif %}
-                </div>
-                <h4 class="font-bold">Ibraimov Nooruzbai</h4>
-
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="flex min-h-screen w-1/6 flex-col bg-zinc-900 p-4 text-white">
+        <h2 class="my-2 text-xl font-bold">Sidebar</h2>
+        <div class="flex h-10 items-center rounded bg-zinc-900 hover:bg-zinc-500">
+            <div class="m-2">
+                {% if user.picture_url %}
+                <img src="{{ user.picture_url }}" alt="Profile Image" class="h-8 w-8 rounded-full" />
+                {% else %}
+                <img
+                    src="/static/images/profile_pictures/profile_picture.jpg"
+                    alt="Default Image"
+                    class="h-8 w-8 rounded-full"
+                />
+                {% endif %}
             </div>
+            <h4 class="font-bold">{{ user.last_name }} {{ user.first_name }}</h4>
+        </div>
 
-        <ul class="mt-4 gap-2 flex flex-col flex-1">
-            <li><a href="#" class="flex p-1 bg-zinc-700 text-sm rounded hover:bg-zinc-500">Profile</a></li>
+        <ul class="mt-4 flex flex-1 flex-col gap-2">
+            <li><a href="#" class="flex rounded bg-zinc-700 p-1 text-sm hover:bg-zinc-500">Profile</a></li>
         </ul>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex flex-1 flex-col bg-zinc-950 p-8 justify-center items-center">
-        <div class="flex flex-col border rounded-lg border-zinc-600 w-3/5">
+    <main class="flex flex-1 flex-col items-center justify-center bg-zinc-950 p-8">
+        <div class="flex w-3/5 flex-col rounded-lg border border-zinc-600">
             <div class="flex flex-col border-b border-zinc-600">
                 <div class="m-4">
                     <h2 class="text-2xl font-bold text-white">Profile</h2>
@@ -33,45 +35,50 @@
                 </div>
             </div>
 
-                <div class="flex flex-col justify-center items-center w-3/2 my-4">
-
-
-                    <form class="flex flex-col gap-4 text-white w-3/4" method="post" enctype="multipart/form-data"
-                          action="/settings">
-
-                        <div class="flex flex-row items-center gap-6">
-
-                            {% if user.picture_url %}
-                                <img src="{{ user.picture_url }}" alt="Profile Image"
-                                     class="w-32 h-32 rounded-full mb-4">
-                            {% else %}
-                                <img src="/static/images/profile_pictures/profile_picture.jpg" alt="Default Image"
-                                     class="w-32 h-32 rounded-full mb-4">
-                            {% endif %}
-
-                            <div class="flex flex-col gap-2 ">
-                                <label class="text-sm font-medium text-white" for="picture">Profile Picture</label>
-                                <input class="w-full bg-zinc-950 border border-zinc-600 rounded-lg" type="file"
-                                       id="picture_url" name="picture_url" />
-                            </div>
-                        </div>
-
+            <div class="w-3/2 my-4 flex flex-col items-center justify-center">
+                <form
+                    class="flex w-3/4 flex-col gap-4 text-white"
+                    method="post"
+                    enctype="multipart/form-data"
+                    action="/settings"
+                >
+                    <div class="flex flex-row items-center gap-6">
+                        {% if user.picture_url %}
+                        <img src="{{ user.picture_url }}" alt="Profile Image" class="mb-4 h-32 w-32 rounded-full" />
+                        {% else %}
+                        <img
+                            src="/static/images/profile_pictures/profile_picture.jpg"
+                            alt="Default Image"
+                            class="mb-4 h-32 w-32 rounded-full"
+                        />
+                        {% endif %}
 
                         <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="firstName">First name</label>
+                            <label class="text-sm font-medium text-white" for="picture">Profile Picture</label>
                             <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="text"
-                                id="firstName"
-                                name="first_name"
-                                value="{{ user.first_name }}"
+                                class="w-full rounded-lg border border-zinc-600 bg-zinc-950"
+                                type="file"
+                                id="picture_url"
+                                name="picture_url"
                             />
                         </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="firstName">First name</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="firstName"
+                            name="first_name"
+                            value="{{ user.first_name }}"
+                        />
+                    </div>
 
                     <div class="flex flex-col gap-2">
                         <label class="text-sm font-medium text-white" for="lastName">Last name</label>
                         <input
-                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                             type="text"
                             id="lastName"
                             name="last_name"
@@ -82,7 +89,7 @@
                     <div class="flex flex-col gap-2">
                         <label class="text-sm font-medium text-white" for="userName">Username</label>
                         <input
-                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                             type="text"
                             id="userName"
                             name="username"
@@ -92,7 +99,7 @@
                     <div class="flex flex-col gap-2">
                         <label class="text-sm font-medium text-white" for="email">Email</label>
                         <input
-                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                             type="text"
                             id="email"
                             name="email"
@@ -103,7 +110,7 @@
                     <div class="flex flex-col gap-2">
                         <label class="text-sm font-medium text-white" for="password">Password</label>
                         <input
-                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                             type="password"
                             id="password"
                             name="password"
@@ -114,7 +121,7 @@
                     <div class="flex flex-col gap-2">
                         <label class="text-sm font-medium text-white" for="about">About</label>
                         <input
-                            class="w-full h-40 rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600 align-text-top"
+                            class="h-40 w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1 align-text-top"
                             type="text"
                             id="about"
                             name="about"
@@ -122,12 +129,10 @@
                         />
                     </div>
 
-                    <hr class="absolute w-full border-zinc-600 bottom-14 left-0" />
-
-                    <div class="flex justify-end mt-10 border-zinc-600 w-full">
+                    <div class="mt-10 flex w-full justify-end">
                         <button
                             type="submit"
-                            class="bg-zinc-700 text-white px-6 py-2 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded-md bg-zinc-700 px-6 py-2 text-white hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             Update
                         </button>
@@ -136,16 +141,16 @@
             </div>
         </div>
 
-        <div class="flex flex-col justify-center border border-zinc-600 rounded-lg m-4 w-3/5">
+        <div class="m-4 flex w-3/5 flex-col justify-center rounded-lg border border-zinc-600">
             <div class="m-4">
-                <h1 class="text-red-700 text-lg font-bold">Danger Zone</h1>
-                <p class="text-white text-sm">Proceed with caution. This action is irreversible.</p>
+                <h1 class="text-lg font-bold text-red-700">Danger Zone</h1>
+                <p class="text-sm text-white">Proceed with caution. This action is irreversible.</p>
             </div>
 
-            <div class="flex flex-col w-full border-t border-zinc-600 items-end">
+            <div class="flex w-full flex-col items-end border-t border-zinc-600">
                 <a
                     href="{{ url_for('delete_account', user_id=user.id) }}"
-                    class="bg-red-700 text-white px-4 py-2 rounded-md m-4 hover:bg-red-500"
+                    class="m-4 rounded-md bg-red-700 px-4 py-2 text-white hover:bg-red-500"
                 >
                     Delete Account
                 </a>
@@ -153,8 +158,5 @@
         </div>
     </main>
 </div>
-
-
-
 
 {% endblock %}
