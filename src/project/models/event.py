@@ -55,6 +55,10 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     def get_by_id(session: Session, event_id: int) -> Event | None:
         return session.scalar(select(Event).where(Event.id == event_id))
 
+    @staticmethod
+    def get_all(session: Session) -> Sequence[Event] | None:
+        return (session.scalars(select(Event))).all()
+
 
 class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "booking"
