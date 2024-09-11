@@ -6,13 +6,13 @@
     <h2 class="text-center text-3xl font-semibold text-white">Welcome back</h2>
 
     <div
-        class="mt-8 h-auto max-w-md w-full flex flex-col rounded-lg border border-zinc-600 bg-zinc-900 sm:px-12 px-4 py-12"
+        class="mt-8 flex h-auto w-full max-w-md flex-col rounded-lg border border-zinc-600 bg-zinc-900 px-4 py-12 sm:px-12"
     >
         <form class="flex flex-col gap-4 text-white" method="post" action="/login">
             <div class="flex flex-col gap-2">
                 <label class="text-sm font-medium text-white" for="email">Email</label>
                 <input
-                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                    class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                     type="email"
                     id="email"
                     name="email"
@@ -22,7 +22,7 @@
             <div class="flex flex-col gap-2">
                 <label class="text-sm font-medium text-white" for="password">Password</label>
                 <input
-                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                    class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
                     type="password"
                     id="password"
                     name="password"
@@ -39,7 +39,7 @@
         <div class="mt-8 w-full text-center text-sm">
             <a
                 href="/google_login"
-                class="mx-auto flex w-full items-center justify-center font-medium rounded-md bg-blue-700 py-1 text-white hover:bg-blue-800 transition-colors ease-in-out"
+                class="mx-auto flex w-full items-center justify-center rounded-md bg-blue-700 py-1 font-medium text-white transition-colors ease-in-out hover:bg-blue-800"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@
             </a>
         </div>
 
-        <div class="text-white mt-8 text-sm mx-auto">
+        <div class="mx-auto mt-8 text-sm text-white">
             No account? <a href="/register" class="font-medium text-blue-400 underline">Register here</a>
         </div>
     </div>

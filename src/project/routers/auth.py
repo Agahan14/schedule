@@ -9,7 +9,9 @@ from fastapi import (
     Form,
     HTTPException,
     Request,
-    Response, UploadFile, File,
+    Response,
+    UploadFile,
+    File,
 )
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
@@ -215,12 +217,11 @@ async def settings(
             current_user.username = username
             current_user.email = email
             current_user.about = about
-            if picture_url:
+            if picture_url and picture_url.filename != "":
                 file_path = UPLOAD_DIR / picture_url.filename
                 with file_path.open("wb") as buffer:
                     shutil.copyfileobj(picture_url.file, buffer)
                 current_user.picture_url = f"/static/images/profile_pictures/{picture_url.filename}"
-                print(f"File successfully saved to {file_path}")
             session.commit()
         except Exception as e:
             session.rollback()  # Rollback the transaction on error
