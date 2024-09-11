@@ -5,7 +5,7 @@
 
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-1/6 h-screen flex flex-col bg-zinc-900 text-white p-4">
+        <aside class="w-1/6 min-h-screen flex flex-col bg-zinc-900 text-white p-4">
             <h2 class="text-xl font-bold my-2">Sidebar</h2>
             <div class="flex h-10 bg-zinc-900 items-center rounded hover:bg-zinc-500">
                 <div class="m-2">
@@ -45,7 +45,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex flex-1 bg-zinc-950 p-8 justify-center">
+        <main class="flex flex-1 flex-col bg-zinc-950 p-8 justify-center items-center">
             <div class="flex flex-col border rounded-lg border-zinc-600 w-3/5">
                 <div class="flex flex-col border-b border-zinc-600">
                     <div class="m-4 ">
@@ -60,100 +60,117 @@
 
                 </div>
 
-                <div class="flex flex-col items-center">
-
-                    <div class="flex flex-col w-4/5 my-4">
-
-                        <form class="flex flex-col gap-4 text-white" method="post" action="/settings">
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="firstName">First name</label>
-                                <input
-                                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                    type="text"
-                                    id="firstName"
-                                    name="first_name"
-                                    value="{{ user.first_name }}"
-                                />
-                            </div>
-
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="lastName">Last name</label>
-                                <input
-                                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                    type="text"
-                                    id="lastName"
-                                    name="last_name"
-                                    value="{{ user.last_name }}"
-                                />
-                            </div>
-
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="userName">Username</label>
-                                <input
-                                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                    type="text"
-                                    id="userName"
-                                    name="username"
-                                    value="{{ user.username }}"
-                                />
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="email">Email</label>
-                                <input
-                                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    value="{{ user.email }}"
-                                />
-                            </div>
+                <div class="flex flex-col justify-center items-center w-3/2 my-4">
 
 
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="password">Password</label>
-                                <input
-                                    class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    value="{{ user.password }}"
-                                />
-                            </div>
+                    <form class="flex flex-col gap-4 text-white w-3/4" method="post" enctype="multipart/form-data" action="/settings">
 
-                            <div class="flex flex-col gap-2">
-                                <label class="text-sm font-medium text-white" for="about">About</label>
-                                <input
-                                    class="w-full h-40 rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600 align-text-top"
-                                    type="text"
-                                    id="about"
-                                    name="about"
-                                    value="{{ user.about if user.about is not none else '' }}"
-                                />
-                            </div>
+                        {% if user.profile_image %}
+                            <img src="{{ user.picture_url }}" alt="Profile Image" class="w-32 h-32 rounded-full mb-4">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='default_profile_image.png') }}" alt="Default Image"
+                                 class="w-32 h-32 rounded-full mb-4">
+                        {% endif %}
 
-                            <div class="flex justify-end mt-4">
-                                <button
-                                    type="submit"
-                                    class="bg-zinc-700 text-white px-6 py-2 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    Update
-                                </button>
-                            </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="firstName">First name</label>
+                            <input
+                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                                type="text"
+                                id="firstName"
+                                name="first_name"
+                                value="{{ user.first_name }}"
+                            />
+                        </div>
 
-                        </form>
-                    </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="lastName">Last name</label>
+                            <input
+                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                                type="text"
+                                id="lastName"
+                                name="last_name"
+                                value="{{ user.last_name }}"
+                            />
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="userName">Username</label>
+                            <input
+                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                                type="text"
+                                id="userName"
+                                name="username"
+                                value="{{ user.username }}"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="email">Email</label>
+                            <input
+                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                                type="text"
+                                id="email"
+                                name="email"
+                                value="{{ user.email }}"
+                            />
+                        </div>
 
 
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="password">Password</label>
+                            <input
+                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                                type="password"
+                                id="password"
+                                name="password"
+                                value="{{ user.password }}"
+                            />
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="about">About</label>
+                            <input
+                                class="w-full h-40 rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600 align-text-top"
+                                type="text"
+                                id="about"
+                                name="about"
+                                value="{{ user.about if user.about is not none else '' }}"
+                            />
+                        </div>
+
+                        <div class="flex justify-end mt-4 border-t border-zinc-600 w-full">
+                            <button
+                                type="submit"
+                                class="bg-zinc-700 text-white px-6 py-2 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                Update
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
-
-                <div class="">
-
-
-                </div>
-
 
             </div>
+
+
+            <div class="flex flex-col justify-center border border-zinc-600 rounded-lg m-4 w-3/5">
+
+                <div class="m-4">
+
+                    <h1 class="text-red-700 text-lg font-bold">Danger Zone</h1>
+                    <p class="text-white text-sm">Proceed with caution. This action is irreversible.</p>
+                </div>
+
+                <div class="flex flex-col w-full border-t border-zinc-600 items-end">
+                    <a href="{{ url_for('delete_account', user_id=user.id) }}"
+                       class="bg-red-700 text-white px-4 py-2 rounded-md m-4 hover:bg-red-500">
+                        Delete Account
+                    </a>
+                </div>
+            </div>
+
         </main>
+
     </div>
 
 
