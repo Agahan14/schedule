@@ -15,11 +15,12 @@ from sqlalchemy.orm import Session
 from starlette.responses import HTMLResponse, RedirectResponse
 
 from ..dependencies import (
+    get_current_user,
     get_db_session,
+    get_user_from_session,
     login_user,
     oauth,
     templates,
-    get_current_user, get_user_from_session,
 )
 from ..models.user import User
 from ..utils.additional_func_auth import hash_password, pwd_context

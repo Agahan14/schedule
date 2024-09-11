@@ -1,179 +1,208 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-1/6 min-h-screen flex flex-col bg-zinc-900 text-white p-4">
+        <h2 class="text-xl font-bold my-2">Sidebar</h2>
+        <div class="flex h-10 bg-zinc-900 items-center rounded hover:bg-zinc-500">
+            <div class="m-2">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    version="1.1"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 256 256"
+                    xml:space="preserve"
+                >
+                    <defs></defs>
+                    <g
+                        style="
+                            stroke: none;
+                            stroke-width: 0;
+                            stroke-dasharray: none;
+                            stroke-linecap: butt;
+                            stroke-linejoin: miter;
+                            stroke-miterlimit: 10;
+                            fill: none;
+                            fill-rule: nonzero;
+                            opacity: 1;
+                        "
+                        transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
+                    >
+                        <circle
+                            cx="45"
+                            cy="45"
+                            r="45"
+                            style="
+                                stroke: none;
+                                stroke-width: 1;
+                                stroke-dasharray: none;
+                                stroke-linecap: butt;
+                                stroke-linejoin: miter;
+                                stroke-miterlimit: 10;
+                                fill: rgb(60, 178, 43);
+                                fill-rule: nonzero;
+                                opacity: 1;
+                            "
+                            transform="  matrix(1 0 0 1 0 0) "
+                        />
+                        <path
+                            d="M 45 54.287 c -8.9 0 -16.14 -7.24 -16.14 -16.14 S 36.1 22.007 45 22.007 c 8.899 0 16.14 7.241 16.14 16.14 S 53.899 54.287 45 54.287 z"
+                            style="
+                                stroke: none;
+                                stroke-width: 1;
+                                stroke-dasharray: none;
+                                stroke-linecap: butt;
+                                stroke-linejoin: miter;
+                                stroke-miterlimit: 10;
+                                fill: rgb(255, 255, 255);
+                                fill-rule: nonzero;
+                                opacity: 1;
+                            "
+                            transform=" matrix(1 0 0 1 0 0) "
+                            stroke-linecap="round"
+                        />
+                        <path
+                            d="M 72.957 71.22 c -3.177 -5.75 -8.143 -10.477 -14.049 -13.341 c -2.008 -0.974 -4.352 -0.959 -6.436 0.041 c -2.343 1.126 -4.857 1.696 -7.473 1.696 c -2.616 0 -5.13 -0.571 -7.473 -1.696 c -2.081 -0.999 -4.426 -1.015 -6.435 -0.041 c -5.906 2.864 -10.872 7.59 -14.05 13.341 C 23.877 78.957 33.865 83.843 45 83.843 C 56.135 83.843 66.123 78.957 72.957 71.22 z"
+                            style="
+                                stroke: none;
+                                stroke-width: 1;
+                                stroke-dasharray: none;
+                                stroke-linecap: butt;
+                                stroke-linejoin: miter;
+                                stroke-miterlimit: 10;
+                                fill: rgb(255, 255, 255);
+                                fill-rule: nonzero;
+                                opacity: 1;
+                            "
+                            transform=" matrix(1 0 0 1 0 0) "
+                            stroke-linecap="round"
+                        />
+                    </g>
+                </svg>
+            </div>
+            <h4 class="font-bold">Ibraimov Nooruzbai</h4>
+        </div>
 
-{% block content %}
+        <ul class="mt-4 gap-2 flex flex-col flex-1">
+            <li><a href="#" class="flex p-1 bg-zinc-700 text-sm rounded hover:bg-zinc-500">Profile</a></li>
+        </ul>
+    </aside>
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-1/6 min-h-screen flex flex-col bg-zinc-900 text-white p-4">
-            <h2 class="text-xl font-bold my-2">Sidebar</h2>
-            <div class="flex h-10 bg-zinc-900 items-center rounded hover:bg-zinc-500">
-                <div class="m-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
-                         width="30" height="30" viewBox="0 0 256 256" xml:space="preserve">
+    <!-- Main Content -->
+    <main class="flex flex-1 flex-col bg-zinc-950 p-8 justify-center items-center">
+        <div class="flex flex-col border rounded-lg border-zinc-600 w-3/5">
+            <div class="flex flex-col border-b border-zinc-600">
+                <div class="m-4">
+                    <h2 class="text-2xl font-bold text-white">Profile</h2>
 
-<defs>
-</defs>
-                        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
-                           transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
-	<circle cx="45" cy="45" r="45"
-            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(60,178,43); fill-rule: nonzero; opacity: 1;"
-            transform="  matrix(1 0 0 1 0 0) " />
-                            <path
-                                d="M 45 54.287 c -8.9 0 -16.14 -7.24 -16.14 -16.14 S 36.1 22.007 45 22.007 c 8.899 0 16.14 7.241 16.14 16.14 S 53.899 54.287 45 54.287 z"
-                                style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"
-                                transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
-                            <path
-                                d="M 72.957 71.22 c -3.177 -5.75 -8.143 -10.477 -14.049 -13.341 c -2.008 -0.974 -4.352 -0.959 -6.436 0.041 c -2.343 1.126 -4.857 1.696 -7.473 1.696 c -2.616 0 -5.13 -0.571 -7.473 -1.696 c -2.081 -0.999 -4.426 -1.015 -6.435 -0.041 c -5.906 2.864 -10.872 7.59 -14.05 13.341 C 23.877 78.957 33.865 83.843 45 83.843 C 56.135 83.843 66.123 78.957 72.957 71.22 z"
-                                style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"
-                                transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
-</g>
-</svg>
-
+                    <h3 class="text-white">Manage settings for your Schedule.com profile</h3>
                 </div>
-                <h4 class="font-bold">Ibraimov Nooruzbai</h4>
-
             </div>
 
-            <ul class="mt-4 gap-2 flex flex-col flex-1">
-                <li><a href="#"
-                       class="flex p-1 bg-zinc-700 text-sm rounded hover:bg-zinc-500">Profile</a>
-                </li>
-            </ul>
-
-
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex flex-1 flex-col bg-zinc-950 p-8 justify-center items-center">
-            <div class="flex flex-col border rounded-lg border-zinc-600 w-3/5">
-                <div class="flex flex-col border-b border-zinc-600">
-                    <div class="m-4 ">
-                        <h2 class="text-2xl font-bold text-white">
-                            Profile
-                        </h2>
-
-                        <h3 class="text-white">
-                            Manage settings for your Schedule.com profile
-                        </h3>
+            <div class="flex flex-col justify-center items-center w-3/2 my-4 relative">
+                <form
+                    class="flex flex-col gap-4 text-white w-3/4"
+                    method="post"
+                    enctype="multipart/form-data"
+                    action="/settings"
+                >
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="firstName">First name</label>
+                        <input
+                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            type="text"
+                            id="firstName"
+                            name="first_name"
+                            value="{{ user.first_name }}"
+                        />
                     </div>
 
-                </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="lastName">Last name</label>
+                        <input
+                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            type="text"
+                            id="lastName"
+                            name="last_name"
+                            value="{{ user.last_name }}"
+                        />
+                    </div>
 
-                <div class="flex flex-col justify-center items-center w-3/2 my-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="userName">Username</label>
+                        <input
+                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            type="text"
+                            id="userName"
+                            name="username"
+                            value="{{ user.username }}"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="email">Email</label>
+                        <input
+                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            type="text"
+                            id="email"
+                            name="email"
+                            value="{{ user.email }}"
+                        />
+                    </div>
 
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="password">Password</label>
+                        <input
+                            class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
+                            type="password"
+                            id="password"
+                            name="password"
+                            value="{{ user.password }}"
+                        />
+                    </div>
 
-                    <form class="flex flex-col gap-4 text-white w-3/4" method="post" enctype="multipart/form-data" action="/settings">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="about">About</label>
+                        <input
+                            class="w-full h-40 rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600 align-text-top"
+                            type="text"
+                            id="about"
+                            name="about"
+                            value="{{ user.about if user.about is not none else '' }}"
+                        />
+                    </div>
 
-                        {% if user.profile_image %}
-                            <img src="{{ user.picture_url }}" alt="Profile Image" class="w-32 h-32 rounded-full mb-4">
-                        {% else %}
-                            <img src="{{ url_for('static', filename='default_profile_image.png') }}" alt="Default Image"
-                                 class="w-32 h-32 rounded-full mb-4">
-                        {% endif %}
+                    <hr class="absolute w-full border-zinc-600 bottom-14 left-0" />
 
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="firstName">First name</label>
-                            <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="text"
-                                id="firstName"
-                                name="first_name"
-                                value="{{ user.first_name }}"
-                            />
-                        </div>
+                    <div class="flex justify-end mt-10 border-zinc-600 w-full">
+                        <button
+                            type="submit"
+                            class="bg-zinc-700 text-white px-6 py-2 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="lastName">Last name</label>
-                            <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="text"
-                                id="lastName"
-                                name="last_name"
-                                value="{{ user.last_name }}"
-                            />
-                        </div>
-
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="userName">Username</label>
-                            <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="text"
-                                id="userName"
-                                name="username"
-                                value="{{ user.username }}"
-                            />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="email">Email</label>
-                            <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="text"
-                                id="email"
-                                name="email"
-                                value="{{ user.email }}"
-                            />
-                        </div>
-
-
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="password">Password</label>
-                            <input
-                                class="w-full rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600"
-                                type="password"
-                                id="password"
-                                name="password"
-                                value="{{ user.password }}"
-                            />
-                        </div>
-
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium text-white" for="about">About</label>
-                            <input
-                                class="w-full h-40 rounded-md px-2 py-1 bg-zinc-950 border border-zinc-600 align-text-top"
-                                type="text"
-                                id="about"
-                                name="about"
-                                value="{{ user.about if user.about is not none else '' }}"
-                            />
-                        </div>
-
-                        <div class="flex justify-end mt-4 border-t border-zinc-600 w-full">
-                            <button
-                                type="submit"
-                                class="bg-zinc-700 text-white px-6 py-2 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            >
-                                Update
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
-
+        <div class="flex flex-col justify-center border border-zinc-600 rounded-lg m-4 w-3/5">
+            <div class="m-4">
+                <h1 class="text-red-700 text-lg font-bold">Danger Zone</h1>
+                <p class="text-white text-sm">Proceed with caution. This action is irreversible.</p>
             </div>
 
-
-            <div class="flex flex-col justify-center border border-zinc-600 rounded-lg m-4 w-3/5">
-
-                <div class="m-4">
-
-                    <h1 class="text-red-700 text-lg font-bold">Danger Zone</h1>
-                    <p class="text-white text-sm">Proceed with caution. This action is irreversible.</p>
-                </div>
-
-                <div class="flex flex-col w-full border-t border-zinc-600 items-end">
-                    <a href="{{ url_for('delete_account', user_id=user.id) }}"
-                       class="bg-red-700 text-white px-4 py-2 rounded-md m-4 hover:bg-red-500">
-                        Delete Account
-                    </a>
-                </div>
+            <div class="flex flex-col w-full border-t border-zinc-600 items-end">
+                <a
+                    href="{{ url_for('delete_account', user_id=user.id) }}"
+                    class="bg-red-700 text-white px-4 py-2 rounded-md m-4 hover:bg-red-500"
+                >
+                    Delete Account
+                </a>
             </div>
-
-        </main>
-
-    </div>
-
-
-
+        </div>
+    </main>
+</div>
 
 {% endblock %}
