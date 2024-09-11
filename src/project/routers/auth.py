@@ -1,6 +1,7 @@
 import os
 from typing import Annotated
 from urllib.parse import urlsplit
+from pathlib import Path
 
 from fastapi import (
     APIRouter,
@@ -8,7 +9,7 @@ from fastapi import (
     Form,
     HTTPException,
     Request,
-    Response,
+    Response, UploadFile, File,
 )
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
@@ -35,8 +36,12 @@ from ..utils.errors.error_messages import (
     USER_NOT_FOUND,
 )
 from ..utils.errors.errors import UserDataError
+import shutil
 
 router = APIRouter()
+
+UPLOAD_DIR = Path("src/project/static/images/profile_pictures")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # Gets register template
@@ -184,7 +189,8 @@ async def google_callback(
 
 @router.get("/index", tags=["auth"])
 async def get_index(request: Request, session: Session = Depends(get_db_session)):
-    return templates.TemplateResponse("index.html", {"request": request})
+    current_user = get_current_user(request, session)
+    return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
 
 
 @router.api_route("/settings", methods=["GET", "POST"], tags=["auth"], response_model=None)
@@ -195,9 +201,10 @@ async def settings(
     username: Annotated[str, Form()] = None,
     email: Annotated[str, Form()] = None,
     about: Annotated[str, Form()] = None,
-    db: Session = Depends(get_db_session),
+    picture_url: Annotated[UploadFile, File()] = None,
+    session: Session = Depends(get_db_session),
 ):
-    current_user = get_current_user(request, db)
+    current_user = get_current_user(request, session)
     if request.method == "GET":
         return templates.TemplateResponse("settings.html", {"request": request, "user": current_user})
     elif request.method == "POST":
@@ -207,9 +214,15 @@ async def settings(
             current_user.username = username
             current_user.email = email
             current_user.about = about
-            db.commit()
+            if picture_url:
+                file_path = UPLOAD_DIR / picture_url.filename
+                with file_path.open("wb") as buffer:
+                    shutil.copyfileobj(picture_url.file, buffer)
+                current_user.picture_url = f"/static/images/profile_pictures/{picture_url.filename}"
+                print(f"File successfully saved to {file_path}")
+            session.commit()
         except Exception as e:
-            db.rollback()  # Rollback the transaction on error
+            session.rollback()  # Rollback the transaction on error
             return RedirectResponse(
                 url="/settings", status_code=303, headers={"X-Error": f"An error occurred while updating {e}"}
             )
