@@ -10,6 +10,7 @@ class WeekDay(str, Enum):
     SATURDAY = "Saturday"
     SUNDAY = "Sunday"
 
+
 class TimeType(str, Enum):
     # WEEKS = "Weeks"
     DAYS = "days"
