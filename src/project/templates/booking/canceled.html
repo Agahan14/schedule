@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bookings</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 p-8 text-white">
+        <h1 class="mb-4 text-2xl font-bold">Bookings</h1>
+        <p class="mb-6 text-gray-400">See upcoming and past events booked through your event type links.</p>
+
+        <div class="mb-6">
+            <button
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                <a href="upcoming"> Upcoming </a>
+            </button>
+            <button
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                <a href="unconfirmed"> Unconfirmed </a>
+            </button>
+
+            <button
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                <a href="past"> Past </a>
+            </button>
+            <button
+                class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                Canceled
+            </button>
+        </div>
+
+        {% if bookings %}  {% include "/bookings.html" %} {% else %}
+        <div class="mt-4 text-gray-400">You don't have any meetings yet</div>
+        {% endif %}
+    </body>
+</html>

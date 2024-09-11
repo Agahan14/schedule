@@ -1,0 +1,53 @@
+<div class="space-y-4">
+    {% for booking in bookings %}
+    <div
+        class="flex flex-col md:flex-row items-start justify-between rounded-lg border transition duration-150 border-gray-800 hover:bg-gray-800 p-4 mb-4"
+    >
+        <div class="mb-2 pr-24 md:mb-0">
+            <div class="text-lg font-semibold">{{ booking.date.strftime('%a, %d %b') }}</div>
+            <div class="text-gray-400">
+                {{ booking.date.strftime('%H:%M') }} - {{ (booking.date +
+                timedelta(minutes=booking.event.duration)).strftime('%H:%M') }}
+            </div>
+            <div class="mt-1 text-blue-400">
+                <a href="{{ booking.meeting_url }}" target="_blank">Join Google Meet</a>
+            </div>
+        </div>
+
+        <div class="flex-grow md:mx-8">
+            {% if booking.status.value == "canceled" %}
+            <p class="line-through">
+                {{booking.event.duration }} {{ booking.event.time_type.value }} between you and {{ booking.created_by }}
+            </p>
+            {% else %} {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
+            booking.created_by }} {% endif %}
+            <div class="mt-2 text-gray-400">"{{ booking.event.description }}"</div>
+        </div>
+        {% if booking.status.value == "confirmed" %}
+        <div class="flex items-start">
+            <button class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600">
+                Cancel booking
+            </button>
+            <button class="rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600">
+                Edit
+            </button>
+        </div>
+        {% elif booking.status.value =="unconfirmed"%}
+        <div class="flex items-start">
+            <button class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600">
+                Confirm booking
+            </button>
+            <button class="rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600">
+                Edit
+            </button>
+        </div>
+        {% else %}
+        <div class="flex items-start">
+            <button class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-red-800">
+                Delete
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

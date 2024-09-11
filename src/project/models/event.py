@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from sqlalchemy import (
     Boolean,
     DateTime,
+    Enum,
     ForeignKey,
     Integer,
     String,
@@ -22,6 +23,8 @@ from sqlalchemy.orm import (
     relationship,
 )
 
+from src.project.utils.enums import BookingStatus, TimeType
+
 from ..database import Base
 
 
@@ -36,19 +39,14 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         unique=True,
         init=False,
     )
-    bookings: Mapped[list["Booking"]] = relationship(
-        "Booking", back_populates="event", cascade="all, delete-orphan"
-    )
+    bookings: Mapped[list[Booking]] = relationship("Booking", back_populates="event", cascade="all, delete-orphan")
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
     location_url: Mapped[str] = mapped_column(String, nullable=False)
-    date: Mapped[datetime.datetime] = mapped_column(
-        DateTime, server_default=func.now(), nullable=False, init=False
-    )
-    is_hidden: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, server_default=sql.false(), init=False
-    )
+    date: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False, init=False)
+    is_hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql.false(), init=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
+    time_type: Mapped[TimeType] = mapped_column(Enum(TimeType), nullable=True, init=False, default=TimeType.MINUTES)
     description: Mapped[str] = mapped_column(String, nullable=True, default=None)
 
     @staticmethod
@@ -69,11 +67,8 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     )
     created_by: Mapped[str] = mapped_column(String, nullable=False, unique=False)
     email: Mapped[str] = mapped_column(String, nullable=False, unique=False)
-    date: Mapped[datetime.datetime] = mapped_column(
-        DateTime, nullable=False, default=None
-    )
-    is_confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    is_canceled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, default=None)
+    status: Mapped[BookingStatus] = mapped_column(Enum(BookingStatus), nullable=True, default=BookingStatus.UNCONFIRMED)
     event_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("event.id", ondelete="CASCADE"),
@@ -86,9 +81,7 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     #     String, nullable=True, init=False
     # )
 
-    event: Mapped[Event] = relationship(
-        "Event", back_populates="bookings", default=False
-    )
+    event: Mapped[Event] = relationship(Event, back_populates="bookings", default=False)
 
     @staticmethod
     def delete_by_id(session: Session, id: int) -> None:
@@ -103,53 +96,52 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     @staticmethod
     def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
+            select(Booking).join(Event).where(Event.user_id == user_id).order_by(desc(Booking.created_at))
+        ).all()
+
+    @staticmethod
+    def get_all_canceled_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
+        return session.scalars(
             select(Booking)
+            .join(Event)
+            .where(Event.user_id == user_id, Booking.status.is_(BookingStatus.CANCELED))
+            .order_by(desc(Booking.created_at))
+        ).all()
+
+    @staticmethod
+    def get_all_unconfirmed_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
+        return session.scalars(
+            select(Booking)
+            .join(Event)
             .where(
-                Booking.event_id.in_(select(Event.id).where(Event.user_id == user_id))
+                Event.user_id == user_id,
+                Booking.date > func.current_time(),
+                Booking.status.is_(BookingStatus.UNCONFIRMED),
             )
             .order_by(desc(Booking.created_at))
         ).all()
 
     @staticmethod
-    def get_all_canceld_by_user_id(
-        session: Session, user_id: int
-    ) -> Sequence[Booking] | None:
+    def get_all_upcoming_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
-            .where(Booking.event_id.user_id == user_id, Booking.is_canceled._is(True))
-            .order_by(desc(Booking.created_at))
-        ).all()
-
-    @staticmethod
-    def get_all_unconfirmed_by_user_id(
-        session: Session, user_id: int
-    ) -> Sequence[Booking] | None:
-        return session.scalars(
-            select(Booking)
-            .where(Booking.event_id.user_id == user_id, Booking.is_confirmed._is(False))
-            .order_by(desc(Booking.created_at))
-        ).all()
-
-    @staticmethod
-    def get_all_upcoming_by_user_id(
-        session: Session, user_id: int
-    ) -> Sequence[Booking] | None:
-        return session.scalars(
-            select(Booking)
+            .join(Event)
             .where(
-                Booking.event_id.user_id == user_id, Booking.date > func.current_time()
+                Event.user_id == user_id,
+                Booking.date > func.current_time(),
+                Booking.status.is_(BookingStatus.CONFIRMED),
             )
             .order_by(desc(Booking.created_at))
         ).all()
 
     @staticmethod
-    def get_all_past_bookings_by_user_id(
-        session: Session, user_id: int
-    ) -> Sequence[Booking] | None:
+    def get_all_past_bookings_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
+            .join(Event)
             .where(
-                Booking.event_id.user_id == user_id, Booking.date < func.current_time()
+                Event.user_id == user_id,
+                Booking.status.is_(BookingStatus.PAST),
             )
             .order_by(desc(Booking.created_at))
         ).all()
