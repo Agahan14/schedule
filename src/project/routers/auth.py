@@ -214,3 +214,9 @@ async def settings(
                 url="/settings", status_code=303, headers={"X-Error": f"An error occurred while updating {e}"}
             )
         return RedirectResponse(url="/settings", status_code=303)
+
+
+@router.post("/delete_account/{user_id}", tags=["auth"])
+async def delete_account(user_id: int, session: Session = Depends(get_db_session)):
+    User.delete(session, user_id)
+    return RedirectResponse(url="/login", status_code=303)

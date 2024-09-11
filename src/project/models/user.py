@@ -2,6 +2,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from sqlalchemy import Boolean, Integer, String, select, Text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
 from sqlalchemy import Enum as SQLEnum
 
@@ -39,6 +40,20 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     @staticmethod
     def get_by_email(session: Session, email: str) -> User | None:
         return session.scalar(select(User).where(User.email == email))
+
+    @staticmethod
+    def delete(session: Session, id: int) -> User | None:
+        try:
+            user = session.scalar(select(User).where(User.id == id))
+            if user:
+                session.delete(user)
+                session.commit()
+                return user
+        except SQLAlchemyError as e:
+            session.rollback()
+            print(f"An error occurred: {str(e)}")  # You can replace this with proper logging
+            return None
+
 
     @property
     def full_name(self) -> str:
