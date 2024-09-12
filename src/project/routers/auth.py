@@ -201,6 +201,7 @@ async def settings(
         return templates.TemplateResponse("settings.html", {"request": request, "user": current_user})
     elif request.method == "POST":
         try:
+            old_email = current_user.email
             current_user.first_name = first_name
             current_user.last_name = last_name
             current_user.username = username
@@ -212,6 +213,9 @@ async def settings(
                     shutil.copyfileobj(picture_url.file, buffer)
                 current_user.picture_url = f"/static/images/profile_pictures/{picture_url.filename}"
             session.commit()
+
+            if old_email != email:
+                return RedirectResponse(url="/login", status_code=303)
         except Exception as e:
             session.rollback()  # Rollback the transaction on error
             return RedirectResponse(
