@@ -7,13 +7,13 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="min-h-screen bg-slate-100 dark:bg-gray-900 dark:text-gray-400">
-        <div class="w-11/12 mt-10 mx-auto">
+        <div class="mx-auto mt-10 w-11/12">
             <div class="flex justify-between">
                 <div>
-                    <h1 class="text-gray-100 text-xl">Event Types</h1>
-                    <p class="text-gray-400 text-sm">Create events to share for people to book on your calendar.</p>
+                    <h1 class="text-xl text-gray-100">Event Types</h1>
+                    <p class="text-sm text-gray-400">Create events to share for people to book on your calendar.</p>
                 </div>
-                <button class="w-24 bg-slate-100 rounded-lg text-gray-900">New</button>
+                <button class="w-24 rounded-lg bg-slate-100 text-gray-900">New</button>
             </div>
         </div>
 
@@ -27,15 +27,15 @@
 
         {% if not events %}
         <div
-            class="flex items-center justify-center h-96 w-11/12 mx-auto mt-10 rounded-lg border-gray-400 border-2 border-dotted"
+            class="mx-auto mt-10 flex h-96 w-11/12 items-center justify-center rounded-lg border-2 border-dotted border-gray-400"
         >
-            <div class="text-center space-y-4">
-                <div class="text-gray-100 text-xl">Create your first event type</div>
-                <div class="text-gray-400 text-sm">
+            <div class="space-y-4 text-center">
+                <div class="text-xl text-gray-100">Create your first event type</div>
+                <div class="text-sm text-gray-400">
                     <p>Event types enable you to share links that show available times</p>
                     <p>on your calendar and allow people to make bookings with you.</p>
                 </div>
-                <button class="w-20 h-10 bg-slate-100 rounded-lg text-gray-900">Create</button>
+                <button class="h-10 w-20 rounded-lg bg-slate-100 text-gray-900">Create</button>
             </div>
         </div>
         {% endif %}
