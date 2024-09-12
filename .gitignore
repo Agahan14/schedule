@@ -404,3 +404,6 @@ typesense-data
 database.db
 
 .env
+
+/src/project/static/images/profile_pictures
+
