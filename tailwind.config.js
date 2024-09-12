@@ -6,7 +6,10 @@ module.exports = {
     "./src/project/static/scripts/**/*.{js,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+
+     
+    },
   },
   plugins: [
     require("@tailwindcss/forms"),

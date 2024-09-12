@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
-from ..dependencies import get_db_session
+from ..dependencies import get_db_session, get_current_user
 from ..models import Event
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -18,7 +18,8 @@ router = APIRouter(prefix="/event")
 
 @router.get("/", tags=["event"])
 async def events(request: Request, session: Session = Depends(get_db_session)):
-    events = Event.get_all(session)
+    current_user = get_current_user(request=request, session=session)
+    events = Event.get_all_by_user_id(session, current_user.id)
     return templates.TemplateResponse(
         "event.html",
         {"request": request, "events": events},
