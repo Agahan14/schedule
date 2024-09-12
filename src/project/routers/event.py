@@ -20,7 +20,14 @@ router = APIRouter(prefix="/event")
 async def events(request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
     events = Event.get_all_by_user_id(session, current_user.id)
+
     return templates.TemplateResponse(
         "event.html",
         {"request": request, "events": events},
     )
+
+
+@router.get("/{id}/", tags=["event"])
+async def get_event(id: int, request: Request, session: Session = Depends(get_db_session)):
+    event = Event.get_by_id(session, id)
+    return templates.TemplateResponse("retrieve_event.html", {"request": request, "event": event})
