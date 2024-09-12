@@ -402,3 +402,8 @@ typesense-data
 .DS_Store
 *.sqlite
 database.db
+
+.env
+
+/src/project/static/images/profile_pictures
+

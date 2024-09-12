@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Booking</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="min-h-screen bg-slate-100 dark:bg-gray-900 dark:text-gray-400">
+        <div class="mx-auto mt-10 w-11/12">
+            <div class="flex justify-between">
+                <div>
+                    <h1 class="text-xl text-gray-100">Event Types</h1>
+                    <p class="text-sm text-gray-400">Create events to share for people to book on your calendar.</p>
+                </div>
+                <button class="w-24 rounded-lg bg-slate-100 text-gray-900">New</button>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            {% for event in events %}
+            <div class="flex">
+                <div>{{event.title}}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not events %}
+        <div
+            class="mx-auto mt-10 flex h-96 w-11/12 items-center justify-center rounded-lg border-2 border-dotted border-gray-400"
+        >
+            <div class="space-y-4 text-center">
+                <div class="text-xl text-gray-100">Create your first event type</div>
+                <div class="text-sm text-gray-400">
+                    <p>Event types enable you to share links that show available times</p>
+                    <p>on your calendar and allow people to make bookings with you.</p>
+                </div>
+                <button class="h-10 w-20 rounded-lg bg-slate-100 text-gray-900">Create</button>
+            </div>
+        </div>
+        {% endif %}
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello world</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Vue -->
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="/static/vue/base.js" defer></script>
+        <script src="/static/vue/main.js" defer></script>
+    </head>
+    <!-- prettier-ignore -->
+    {#{% import "components/test.html" as test %}#}
+{#{{ test.render() }}#}
+
+    <body class="" id="app">
+        {% block content %} {% endblock %}
+    </body>
+</html>

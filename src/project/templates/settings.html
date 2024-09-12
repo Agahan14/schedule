@@ -1,0 +1,208 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="flex min-h-screen w-1/6 flex-col bg-zinc-900 p-4 text-white">
+        <h2 class="my-2 text-xl font-bold">Sidebar</h2>
+
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="mb-4 flex items-center text-white hover:text-gray-300">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mr-2 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+        </a>
+        <div class="flex h-10 items-center rounded bg-zinc-900 hover:bg-zinc-500">
+            <div class="m-2">
+                {% if user.picture_url %}
+                <img src="{{ user.picture_url }}" alt="Profile Image" class="h-8 w-8 rounded-full" />
+                {% else %}
+                <img
+                    src="/static/images/profile_pictures/profile_picture.jpg"
+                    alt="Default Image"
+                    class="h-8 w-8 rounded-full"
+                />
+                {% endif %}
+            </div>
+            <h4 class="font-bold">{{ user.last_name }} {{ user.first_name }}</h4>
+        </div>
+
+        <ul class="mt-4 flex flex-1 flex-col gap-2">
+            <li><a href="#" class="flex rounded bg-zinc-700 p-1 text-sm hover:bg-zinc-500">Profile</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex flex-1 flex-col items-center justify-center bg-zinc-950 p-8">
+        <div class="flex w-3/5 flex-col rounded-lg border border-zinc-600">
+            <div class="flex flex-col border-b border-zinc-600">
+                <div class="m-4">
+                    <h2 class="text-2xl font-bold text-white">Profile</h2>
+
+                    <h3 class="text-white">Manage settings for your Schedule.com profile</h3>
+                </div>
+            </div>
+
+            <div class="w-3/2 my-4 flex flex-col items-center justify-center">
+                <form
+                    class="flex w-3/4 flex-col gap-4 text-white"
+                    method="post"
+                    enctype="multipart/form-data"
+                    action="/settings"
+                >
+                    <div class="flex flex-row items-center gap-6">
+                        {% if user.picture_url %}
+                        <img src="{{ user.picture_url }}" alt="Profile Image" class="mb-4 h-32 w-32 rounded-full" />
+                        {% else %}
+                        <img
+                            src="/static/images/profile_pictures/profile_picture.jpg"
+                            alt="Default Image"
+                            class="mb-4 h-32 w-32 rounded-full"
+                        />
+                        {% endif %}
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-white" for="picture">Profile Picture</label>
+                            <input
+                                class="w-full rounded-lg border border-zinc-600 bg-zinc-950"
+                                type="file"
+                                id="picture_url"
+                                name="picture_url"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="firstName">First name</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="firstName"
+                            name="first_name"
+                            value="{{ user.first_name if user.first_name is not none else '' }}"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="lastName">Last name</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="lastName"
+                            name="last_name"
+                            value="{{ user.last_name if user.last_name is not none else '' }}"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="userName">Username</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="userName"
+                            name="username"
+                            value="{{ user.username if user.username is not none else '' }}"
+                        />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="email">Email</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="email"
+                            name="email"
+                            value="{{ user.email }}"
+                            {%
+                            if
+                            user.oauth_provider.value =="GOOGLE"
+                            %}
+                            disabled
+                            {%
+                            endif
+                            %}
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="password">Password</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="password"
+                            id="password"
+                            name="password"
+                            value="{{ user.password }}"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-white" for="about">About</label>
+                        <input
+                            class="h-40 w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1 align-text-top"
+                            type="text"
+                            id="about"
+                            name="about"
+                            value="{{ user.about if user.about is not none else '' }}"
+                        />
+                    </div>
+
+                    <div class="mt-10 flex w-full justify-end">
+                        <button
+                            type="submit"
+                            class="rounded-md bg-zinc-700 px-6 py-2 text-white hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="m-4 flex w-3/5 flex-col justify-center rounded-lg border border-zinc-600">
+            <div class="m-4">
+                <h1 class="text-lg font-bold text-red-700">Danger Zone</h1>
+                <p class="text-sm text-white">Proceed with caution. This action is irreversible.</p>
+            </div>
+
+            <div class="flex w-full flex-col items-end border-t border-zinc-600">
+                <a
+                    href="{{ url_for('delete_account', user_id=user.id) }}"
+                    class="m-4 rounded-md bg-red-700 px-4 py-2 text-white hover:bg-red-500"
+                    onclick="confirmDelete(event, '{{ url_for('delete_account', user_id=user.id) }}')"
+                >
+                    Delete Account
+                </a>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function confirmDelete(event, url) {
+        event.preventDefault();
+
+        if (confirm("Are you sure you want to delete your account?")) {
+            fetch(url, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "same-origin",
+            }).then((response) => {
+                if (response.ok) {
+                    alert("Account deleted");
+                    window.location.href = "/login";
+                } else {
+                    alert("Failed to delete account");
+                }
+            });
+        }
+    }
+</script>
+
+{% endblock %}
