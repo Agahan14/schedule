@@ -18,3 +18,4 @@ EMAIL_ALREADY_REGISTERED = "Looks like you have been already registered. Please 
 GOOGLE_USER = "Looks like you are a Google User. Please sign in via Google!"
 USER_NOT_FOUND = "Looks like you have not been registred. Please register!"
 INCORRECT_PASSWORD = "Looks like you have entered incorrect password. Please enter valid password"
+NOT_ENOUGH_PERMISSION = "Looks like you do not have permission to see this page!"

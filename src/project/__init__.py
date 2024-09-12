@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
 from .database import lifespan
@@ -26,8 +27,11 @@ def create_app() -> FastAPI:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
     app.add_middleware(
-        SessionMiddleware, secret_key="0c94f0f7-a1b3-41c9-9d6a-56a7fd156fcc"
+        SessionMiddleware, secret_key="0c94f0f7-a1b3-41c9-9d6a-56a7fd156fcc",
     )
+    # app.add_middleware(
+    #     AuthenticationMiddleware, backend=SomeBackend
+    # )
     # if debug:
     #     app.add_middleware(
     #         DebugToolbarMiddleware,

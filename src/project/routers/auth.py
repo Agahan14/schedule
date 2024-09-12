@@ -1,26 +1,27 @@
 import os
+import shutil
+from pathlib import Path
 from typing import Annotated
 from urllib.parse import urlsplit
-from pathlib import Path
 
 from fastapi import (
     APIRouter,
     Depends,
+    File,
     Form,
     HTTPException,
     Request,
     Response,
     UploadFile,
-    File,
 )
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.orm import Session
+from starlette import status
 from starlette.responses import HTMLResponse, RedirectResponse
 
 from ..dependencies import (
     get_current_user,
     get_db_session,
-    get_user_from_session,
     login_user,
     oauth,
     templates,
@@ -32,6 +33,7 @@ from ..utils.errors.error_messages import (
     EMAIL_ALREADY_REGISTERED,
     GOOGLE_USER,
     INCORRECT_PASSWORD,
+    NOT_ENOUGH_PERMISSION,
     OAUTH_NO_EMAIL,
     OAUTH_NO_USER_INFO,
     PASSWORD_REQUIRED,
@@ -39,7 +41,6 @@ from ..utils.errors.error_messages import (
     USER_NOT_FOUND,
 )
 from ..utils.errors.errors import UserDataError
-import shutil
 
 router = APIRouter()
 
@@ -109,26 +110,9 @@ async def post_login(
     return response
 
 
-# For now it returns page for authenticated person
-@router.get("/get_authenticated_page", tags=["auth"], response_class=HTMLResponse)
-async def get_authenticated_page(request: Request, db: Session = Depends(get_db_session)) -> HTMLResponse:
-    # Get the session cookie
-    cookie_value = request.cookies.get("sess")
-    if not cookie_value:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    # Retrieve the user from the session
-    user = get_user_from_session(cookie_value, db)
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
-
-    # Pass the user to the template
-    return templates.TemplateResponse("/authenticated_index.html", {"request": request, "user": user})
-
-
 @router.get("/logout")
 async def logout(request: Request, response: Response) -> Response:
-    response = RedirectResponse(url="/")
+    response = RedirectResponse(url="/login")
     response.delete_cookie(key="sess")
     return response
 
@@ -186,13 +170,15 @@ async def google_callback(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    response = login_user(user=user, redirect_url="get_authenticated_page")
+    response = login_user(user=user, redirect_url="/index")
     return response
 
 
 @router.get("/index", tags=["auth"])
 async def get_index(request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request, session)
+    if not current_user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=NOT_ENOUGH_PERMISSION)
     return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
 
 
@@ -209,6 +195,8 @@ async def settings(
 ):
     current_user = get_current_user(request, session)
     if request.method == "GET":
+        if not get_current_user(request, session):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=NOT_ENOUGH_PERMISSION)
         return templates.TemplateResponse("settings.html", {"request": request, "user": current_user})
     elif request.method == "POST":
         try:
@@ -231,7 +219,7 @@ async def settings(
         return RedirectResponse(url="/settings", status_code=303)
 
 
-@router.post("/delete_account/{user_id}", tags=["auth"])
+@router.delete("/delete_account/{user_id}", tags=["auth"])
 async def delete_account(user_id: int, session: Session = Depends(get_db_session)):
     User.delete(session, user_id)
     return RedirectResponse(url="/login", status_code=303)
