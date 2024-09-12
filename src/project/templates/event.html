@@ -1,24 +1,43 @@
-<!-- templates/events.html -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Events</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Booking</title>
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body>
-        <h1>Events List</h1>
-        <ul>
+    <body class="min-h-screen bg-slate-100 dark:bg-gray-900 dark:text-gray-400">
+        <div class="w-11/12 mt-10 mx-auto">
+            <div class="flex justify-between">
+                <div>
+                    <h1 class="text-gray-100 text-xl">Event Types</h1>
+                    <p class="text-gray-400 text-sm">Create events to share for people to book on your calendar.</p>
+                </div>
+                <button class="w-24 bg-slate-100 rounded-lg text-gray-900">New</button>
+            </div>
+        </div>
+
+        <div class="space-y-4">
             {% for event in events %}
-            <li>
-                <strong>Title:</strong> {{ event.title }} <br />
-                <strong>URL:</strong> <a href="{{ event.url }}">{{ event.url }}</a> <br />
-                <strong>Location URL:</strong> <a href="{{ event.location_url }}">{{ event.location_url }}</a> <br />
-                <strong>Date:</strong> {{ event.date.strftime('%Y-%m-%d %H:%M') }} <br />
-                <strong>Duration (minutes):</strong> {{ event.duration }} <br />
-                <strong>Description:</strong> {{ event.description if event.description else 'N/A' }}
-            </li>
-            <br />
+            <div class="flex">
+                <div>{{event.title}}</div>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
+
+        {% if not events %}
+        <div
+            class="flex items-center justify-center h-96 w-11/12 mx-auto mt-10 rounded-lg border-gray-400 border-2 border-dotted"
+        >
+            <div class="text-center space-y-4">
+                <div class="text-gray-100 text-xl">Create your first event type</div>
+                <div class="text-gray-400 text-sm">
+                    <p>Event types enable you to share links that show available times</p>
+                    <p>on your calendar and allow people to make bookings with you.</p>
+                </div>
+                <button class="w-20 h-10 bg-slate-100 rounded-lg text-gray-900">Create</button>
+            </div>
+        </div>
+        {% endif %}
     </body>
 </html>

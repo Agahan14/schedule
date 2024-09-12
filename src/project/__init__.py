@@ -3,10 +3,10 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
 from .database import lifespan
+from .routers import auth, booking, event
 from .routers import auth, booking
 
 
@@ -29,9 +29,6 @@ def create_app() -> FastAPI:
     app.add_middleware(
         SessionMiddleware, secret_key="0c94f0f7-a1b3-41c9-9d6a-56a7fd156fcc",
     )
-    # app.add_middleware(
-    #     AuthenticationMiddleware, backend=SomeBackend
-    # )
     # if debug:
     #     app.add_middleware(
     #         DebugToolbarMiddleware,
@@ -47,6 +44,7 @@ def create_app() -> FastAPI:
 
     app.include_router(auth.router)
     app.include_router(booking.router)
+    app.include_router(event.router)
 
     return app
 

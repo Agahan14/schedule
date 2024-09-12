@@ -1,6 +1,7 @@
 import os
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
@@ -15,8 +16,8 @@ templates = Jinja2Templates(directory=template_dir)
 router = APIRouter(prefix="/event")
 
 
-@router.get("/event", tags=["event"])
-async def academy(request: Request, session: Session = Depends(get_db_session)):
+@router.get("/", tags=["event"])
+async def events(request: Request, session: Session = Depends(get_db_session)):
     events = Event.get_all(session)
     return templates.TemplateResponse(
         "event.html",
