@@ -57,6 +57,11 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     def get_all(session: Session) -> Sequence[Event] | None:
         return (session.scalars(select(Event))).all()
 
+    @staticmethod
+    def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Event] | None:
+        return session.scalars((
+            select(Event).where(Event.user_id == user_id)).order_by(Event.date)).all()
+
 
 class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "booking"
@@ -68,7 +73,8 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     created_by: Mapped[str] = mapped_column(String, nullable=False, unique=False)
     email: Mapped[str] = mapped_column(String, nullable=False, unique=False)
     date: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, default=None)
-    status: Mapped[BookingStatus] = mapped_column(Enum(BookingStatus), nullable=True, default=BookingStatus.UNCONFIRMED)
+    is_confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_canceled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     event_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("event.id", ondelete="CASCADE"),
@@ -81,7 +87,7 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     #     String, nullable=True, init=False
     # )
 
-    event: Mapped[Event] = relationship(Event, back_populates="bookings", default=False)
+    event: Mapped[Event] = relationship("Event", back_populates="bookings", default=False)
 
     @staticmethod
     def delete_by_id(session: Session, id: int) -> None:
@@ -96,11 +102,13 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     @staticmethod
     def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
-            select(Booking).join(Event).where(Event.user_id == user_id).order_by(desc(Booking.created_at))
+            select(Booking)
+            .where(Booking.event_id.in_(select(Event.id).where(Event.user_id == user_id)))
+            .order_by(desc(Booking.created_at))
         ).all()
 
     @staticmethod
-    def get_all_canceled_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
+    def get_all_canceld_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
             .join(Event)
@@ -125,12 +133,7 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     def get_all_upcoming_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
-            .join(Event)
-            .where(
-                Event.user_id == user_id,
-                Booking.date > func.current_time(),
-                Booking.status.is_(BookingStatus.CONFIRMED),
-            )
+            .where(Booking.event_id.user_id == user_id, Booking.date > func.current_time())
             .order_by(desc(Booking.created_at))
         ).all()
 
@@ -138,10 +141,6 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     def get_all_past_bookings_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
-            .join(Event)
-            .where(
-                Event.user_id == user_id,
-                Booking.status.is_(BookingStatus.PAST),
-            )
+            .where(Booking.event_id.user_id == user_id, Booking.date < func.current_time())
             .order_by(desc(Booking.created_at))
         ).all()
