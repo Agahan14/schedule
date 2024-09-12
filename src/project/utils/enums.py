@@ -18,6 +18,13 @@ class TimeType(str, Enum):
     MINUTES = "Minutes"
 
 
+class BookingStatus(str, Enum):
+    CONFIRMED = "confirmed"
+    UNCONFIRMED = "unconfirmed"
+    CANCELED = "canceled"
+    PAST = "past"
+
+
 class OauthProvider(Enum):
     GOOGLE = "GOOGLE"
     ORDINARY_USER = "ORDINARY_USER"
