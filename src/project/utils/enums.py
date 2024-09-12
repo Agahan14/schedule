@@ -12,7 +12,6 @@ class WeekDay(str, Enum):
 
 
 class TimeType(str, Enum):
-    # WEEKS = "Weeks"
     DAYS = "days"
     HOURS = "Hours"
     MINUTES = "Minutes"
