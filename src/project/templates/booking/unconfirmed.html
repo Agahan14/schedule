@@ -11,31 +11,33 @@
         <p class="mb-6 text-gray-400">See upcoming and past events booked through your event type links.</p>
 
         <div class="mb-6">
-            <button
+            <a
+                href="upcoming"
                 class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
             >
-                <a href="upcoming"> Upcoming </a>
-            </button>
-            <button
-                class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+                Upcoming
+            </a>
+            <a
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 bg-gray-700 hover:bg-gray-600 hover:scale-95"
             >
                 Unconfirmed
-            </button>
-
-            <button
+            </a>
+            <a
+                href="past"
                 class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
             >
-                <a href="past"> Past </a>
-            </button>
-            <button
+                Past
+            </a>
+            <a
+                href="canceled"
                 class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
             >
-                <a href="canceled"> Canceled </a>
-            </button>
+                Canceled
+            </a>
         </div>
 
-        {% if bookings %} {% include "/bookings.html" %} {% else %}
-        <div class="mt-4 text-gray-400">You don't have any meetings yet</div>
-        {% endif %}
+        {% if bookings %} {% include "/bookings.html" %} {% else %} {% from 'booking_empty_state.html' import
+        empty_state %} {% call empty_state( main_text="No unconfirmed bookings",description="You have no unconfirmed
+        bookings.<br />Your unconfirmed bookings will show up here.") %} {% endcall %} {% endif %}
     </body>
 </html>

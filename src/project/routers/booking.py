@@ -1,9 +1,11 @@
 import os
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
+
+from src.project.utils.enums import BookingStatus
 
 from ..dependencies import get_current_user, get_db_session
 from ..models import Booking
@@ -85,3 +87,36 @@ async def past(request: Request, session: Session = Depends(get_db_session)):
             "timedelta": timedelta,
         },
     )
+
+
+@router.post(f"/cancel/{id}", tags=["booking"])
+async def cancel(booking_id: int, request: Request, session: Session = Depends(get_db_session)):
+    current_user = get_current_user(request=request, session=session)
+    # if not current_user:
+    #     raise HTTPException(status_code=404, detail="User not found.")
+
+    booking = Booking.get_by_id(session, id=booking_id)
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found.")
+
+    if booking.event.user_id != current_user.id:
+        raise HTTPException(status_code=401, detail="You are not allowed to cancel this meeting.")
+
+    booking.status = BookingStatus.CANCELED
+
+    session.commit()
+    session.refresh(booking)
+
+
+@router.delete(f"/delete/{id}", tags=["booking"])
+async def delete_booking(booking_id: int, request: Request, session: Session = Depends(get_db_session)):
+    current_user = get_current_user(request=request, session=session)
+    booking = session.get(Booking, booking_id)
+    if not booking or booking.event.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Booking not found or you are not allowed to cancel this meeting.")
+
+    if booking.status not in (BookingStatus.CANCELED, BookingStatus.PAST):
+        raise HTTPException(status_code=401, detail="You are not allowed to cancel this meeting.")
+
+    session.delete(booking)
+    session.commit()
