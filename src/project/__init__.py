@@ -7,7 +7,6 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from .database import lifespan
 from .routers import auth, booking, event
-from .routers import auth, booking
 
 
 def create_app() -> FastAPI:
