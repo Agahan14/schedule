@@ -708,6 +708,9 @@ select {
 .relative {
   position: relative;
 }
+.bottom-14 {
+  bottom: 3.5rem;
+}
 .left-0 {
   left: 0px;
 }
@@ -722,39 +725,6 @@ select {
 }
 .top-3 {
   top: 0.75rem;
-}
-.top-1 {
-  top: 0.25rem;
-}
-.top-16 {
-  top: 4rem;
-}
-.top-96 {
-  top: 24rem;
-}
-.top-px {
-  top: 1px;
-}
-.-top-1\.5 {
-  top: -0.375rem;
-}
-.bottom-24 {
-  bottom: 6rem;
-}
-.bottom-28 {
-  bottom: 7rem;
-}
-.bottom-20 {
-  bottom: 5rem;
-}
-.bottom-16 {
-  bottom: 4rem;
-}
-.bottom-12 {
-  bottom: 3rem;
-}
-.bottom-14 {
-  bottom: 3.5rem;
 }
 .z-50 {
   z-index: 50;
@@ -827,8 +797,8 @@ select {
 .mt-auto {
   margin-top: auto;
 }
-.mt-9 {
-  margin-top: 2.25rem;
+.mt-11 {
+  margin-top: 2.75rem;
 }
 .block {
   display: block;
@@ -862,6 +832,9 @@ select {
 .h-screen {
   height: 100vh;
 }
+.h-96 {
+  height: 24rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -883,6 +856,15 @@ select {
 }
 .w-full {
   width: 100%;
+}
+.w-11\/12 {
+  width: 91.666667%;
+}
+.w-20 {
+  width: 5rem;
+}
+.w-24 {
+  width: 6rem;
 }
 .max-w-md {
   max-width: 28rem;
@@ -926,6 +908,9 @@ select {
 .gap-9 {
   gap: 2.25rem;
 }
+.gap-16 {
+  gap: 4rem;
+}
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
@@ -936,8 +921,8 @@ select {
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
-.rounded {
-  border-radius: 0.25rem;
+.overflow-x-clip {
+  overflow-x: clip;
 }
 .rounded {
   border-radius: 0.25rem;
@@ -959,6 +944,9 @@ select {
 }
 .border-t {
   border-top-width: 1px;
+}
+.border-dotted {
+  border-style: dotted;
 }
 .border-gray-300 {
   --tw-border-opacity: 1;
@@ -1024,8 +1012,6 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(9 9 11 / var(--tw-bg-opacity));
 }
-.p-1 {
-  padding: 0.25rem;
 .bg-black\/60 {
   background-color: rgb(0 0 0 / 0.6);
 }
@@ -1157,11 +1143,6 @@ select {
 }
 .underline {
   text-decoration-line: underline;
-}
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
 .transition-colors {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
