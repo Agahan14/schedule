@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from sqlalchemy import (
     Boolean,
     DateTime,
+    Enum,
     ForeignKey,
     Integer,
     String,
@@ -22,6 +23,8 @@ from sqlalchemy.orm import (
     relationship,
 )
 
+from src.project.utils.enums import BookingStatus, TimeType
+
 from ..database import Base
 
 
@@ -36,13 +39,14 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         unique=True,
         init=False,
     )
-    bookings: Mapped[list["Booking"]] = relationship("Booking", back_populates="event", cascade="all, delete-orphan")
+    bookings: Mapped[list[Booking]] = relationship("Booking", back_populates="event", cascade="all, delete-orphan")
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
     location_url: Mapped[str] = mapped_column(String, nullable=False)
     date: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False, init=False)
     is_hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql.false(), init=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
+    time_type: Mapped[TimeType] = mapped_column(Enum(TimeType), nullable=True, init=False, default=TimeType.MINUTES)
     description: Mapped[str] = mapped_column(String, nullable=True, default=None)
 
     @staticmethod
@@ -107,7 +111,8 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     def get_all_canceld_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
-            .where(Booking.event_id.user_id == user_id, Booking.is_canceled._is(True))
+            .join(Event)
+            .where(Event.user_id == user_id, Booking.status.is_(BookingStatus.CANCELED))
             .order_by(desc(Booking.created_at))
         ).all()
 
@@ -115,7 +120,12 @@ class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     def get_all_unconfirmed_by_user_id(session: Session, user_id: int) -> Sequence[Booking] | None:
         return session.scalars(
             select(Booking)
-            .where(Booking.event_id.user_id == user_id, Booking.is_confirmed._is(False))
+            .join(Event)
+            .where(
+                Event.user_id == user_id,
+                Booking.date > func.current_time(),
+                Booking.status.is_(BookingStatus.UNCONFIRMED),
+            )
             .order_by(desc(Booking.created_at))
         ).all()
 

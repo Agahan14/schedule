@@ -1,5 +1,6 @@
 import os
 
+from fastapi import APIRouter, Depends, Request
 from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -20,7 +21,6 @@ router = APIRouter(prefix="/event")
 async def events(request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
     events = Event.get_all_by_user_id(session, current_user.id)
-
     return templates.TemplateResponse(
         "event.html",
         {"request": request, "events": events},

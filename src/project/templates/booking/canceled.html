@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bookings</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 p-8 text-white">
+        <h1 class="mb-4 text-2xl font-bold">Bookings</h1>
+        <p class="mb-6 text-gray-400">See upcoming and past events booked through your event type links.</p>
+
+        <div class="mb-6">
+            <a
+                href="upcoming"
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                Upcoming
+            </a>
+            <a
+                href="unconfirmed"
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                Unconfirmed
+            </a>
+            <a
+                href="past"
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+            >
+                Past
+            </a>
+            <a
+                class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 bg-gray-700 hover:bg-gray-600 hover:scale-95"
+            >
+                Canceled
+            </a>
+        </div>
+
+        {% if bookings %} {% include "/bookings.html" %} {% else %} {% from 'booking_empty_state.html' import
+        empty_state %} {% call empty_state( main_text="No canceled bookings",description="You didn't cancel any meetings
+        yet.<br />Your canceled bookings will show up here.") %} {% endcall %} {% endif %}
+    </body>
+</html>

@@ -12,10 +12,16 @@ class WeekDay(str, Enum):
 
 
 class TimeType(str, Enum):
-    # WEEKS = "Weeks"
     DAYS = "days"
     HOURS = "Hours"
     MINUTES = "Minutes"
+
+
+class BookingStatus(str, Enum):
+    CONFIRMED = "confirmed"
+    UNCONFIRMED = "unconfirmed"
+    CANCELED = "canceled"
+    PAST = "past"
 
 
 class OauthProvider(Enum):
