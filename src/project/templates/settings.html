@@ -111,6 +111,7 @@
                         />
                     </div>
                     <div class="flex flex-col gap-2">
+                        {% if user.oauth_provider.value =="GOOGLE" %}
                         <label class="text-sm font-medium text-white" for="email">Email</label>
                         <input
                             class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
@@ -118,15 +119,18 @@
                             id="email"
                             name="email"
                             value="{{ user.email }}"
-                            {%
-                            if
-                            user.oauth_provider.value =="GOOGLE"
-                            %}
                             disabled
-                            {%
-                            endif
-                            %}
                         />
+                        {% else %}
+                        <label class="text-sm font-medium text-white" for="email">Email</label>
+                        <input
+                            class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
+                            type="text"
+                            id="email"
+                            name="email"
+                            value="{{ user.email }}"
+                        />
+                        {% endif %}
                     </div>
 
                     <div class="flex flex-col gap-2">
