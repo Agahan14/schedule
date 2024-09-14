@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
-
 from ..dependencies import get_db_session, get_current_user
 from ..models import Event
 
