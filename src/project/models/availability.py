@@ -3,26 +3,12 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
     Integer,
-    String, JSON, Table, Column, DateTime,
+    String, JSON,
 )
 
 from sqlalchemy.orm import Mapped, MappedAsDataclass, mapped_column, relationship, backref
 
 from ..database import Base
-
-
-class EventAvailability(MappedAsDataclass, Base):
-    __tablename__ = "event_availability"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, init=False)
-
-    event_id: Mapped[int] = mapped_column(ForeignKey("event.id", ondelete="CASCADE"))
-    availability_id: Mapped[int] = mapped_column(ForeignKey("availability.id", ondelete="CASCADE"))
-
-    event: Mapped["Event"] = relationship("Event", #type: ignore
-                                          backref=backref("event_availabilities", cascade="all, delete-orphan"))
-    availability: Mapped["Availability"] = relationship("Availability", backref=backref("event_availabilities",
-                                                                                        cascade="all, delete-orphan"))
 
 
 class WorkSchedule(MappedAsDataclass, Base):
@@ -52,15 +38,12 @@ class Availability(MappedAsDataclass, Base, unsafe_hash=True):
         unique=True,
         init=False,
     )
-    event_availabilities: Mapped[List["EventAvailability"]] = relationship(
-        "EventAvailability", backref="availability", cascade="all, delete-orphan"
-    )
-
-    events: Mapped[List["Event"]] = relationship(#type: ignore
-        "Event",
-        secondary="event_availability",  # Reference to the association table
-        viewonly=True,  # Used because the actual relationship is managed through `event_availabilities`
-        backref="availabilities"
+    event_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("event.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        init=False,
     )
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 

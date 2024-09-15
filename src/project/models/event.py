@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Sequence
-from typing import List
 
 from sqlalchemy import (
     Boolean,
@@ -40,16 +39,6 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     user: Mapped["User"] = relationship("User", backref=backref("events", passive_deletes=True,)) #type: ignore
     bookings: Mapped[list["Booking"]] = relationship(
         "Booking", back_populates="event", cascade="all, delete-orphan",
-    )
-    event_availabilities: Mapped[List["EventAvailability"]] = relationship(#type: ignore
-        "EventAvailability", backref="event", cascade="all, delete-orphan"
-    )
-
-    availabilities: Mapped[List["Availability"]] = relationship(#type: ignore
-        "Availability",
-        secondary="event_availability",  # Reference to the association table
-        viewonly=True,  # Used because the actual relationship is managed through `event_availabilities`
-        backref="events"
     )
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)

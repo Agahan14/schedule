@@ -1,5 +1,5 @@
-from .availability import Availability, WorkSchedule, EventAvailability
+from .availability import Availability, WorkSchedule
 from .event import Booking, Event
 from .user import User
 
-__all__ = ["User", "Event", "Booking", "Availability", "WorkSchedule", "EventAvailability", ]
+__all__ = ["User", "Event", "Booking", "Availability", "WorkSchedule",]
