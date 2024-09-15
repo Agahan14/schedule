@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Create Event</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="min-h-screen bg-slate-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+        <form method="post" action="/create/" class="ml-16 mt-8 flex flex-col space-y-4">
+            <div class="w-9/12">
+                <header class="space-y-1 text-left">
+                    <h1 class="text-xl font-semibold">Add a new event type</h1>
+                    <p class="font-thin text-gray-500">Create a new event type for people to book times with.</p>
+                </header>
+            </div>
+            <div class="flex flex-col space-y-4">
+                <div class="mt-5 flex w-11/12 flex-col">
+                    <label>Title</label>
+                    <input
+                    name="title"
+                        class="mt-1 h-10 rounded-md border bg-slate-100 pl-3 font-thin placeholder-gray-500 dark:bg-gray-900"
+                        type="text"
+                        placeholder="Quick chat"
+                    />
+                </div>
+
+                <div class="flex w-11/12 flex-col">
+                    <label>URL</label>
+                    <input name="url"
+                        class="mb-6 mt-1 h-10 rounded-md border bg-slate-100 pb-1 pl-3 font-light placeholder-gray-900 dark:bg-gray-900"
+                        type="text"
+                        placeholder="{{ event.url }}"
+                    />
+                </div>
+
+                <div class="flex w-11/12 flex-col">
+                    <input
+                        name="description"
+                        class="mt-1 h-24 rounded-md border bg-slate-100 pl-3 pt-12 font-thin placeholder-gray-500 dark:bg-gray-900"
+                        type="text"
+                        placeholder="A quick video meeting."
+                    />
+                </div>
+
+                <div class="mt-5 flex w-11/12 flex-col">
+                    <label>Duration</label>
+                    <div class="flex justify-between">
+                        <input
+                        name="duration"
+                            class="mb-6 mt-1 h-10 w-11/12 rounded-l-md border bg-slate-100 pl-3 font-thin placeholder-gray-900 dark:bg-gray-900"
+                            type="number"
+                            placeholder="15"
+                        />
+                        <div
+                            class="mt-1 flex h-10 w-1/12 items-center justify-center rounded-r-md border border-gray-300 bg-gray-300 text-gray-900"
+                        >
+                            Minutes
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <hr class="border-t border-gray-300" />
+                        <div class="mt-4 flex justify-end space-x-4">
+                            <button class="text-gray-500 hover:text-gray-700">Close</button>
+
+                            <button  type="submit" class="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800">Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

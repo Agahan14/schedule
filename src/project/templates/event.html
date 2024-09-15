@@ -24,13 +24,13 @@
             {% for event in events %}
 
             <div class="space-y-2 rounded-md border border-gray-300 p-5 text-sm dark:border-gray-700">
-                <div class="flex space-x-1">
-                    <p class="font-semibold">{{ event.title }}</p>
-                    <p>{{ event.url }}</p>
+                <div class="flex items-center space-x-2">
+                    <p class="font-semibold text-base">{{ event.title }}</p>
+                    <p>/{{ event.url }}</p>
                 </div>
-                <div><p>{{ event.description }}</p></div>
+                <div><p class="font-thin">{{ event.description }}</p></div>
 
-                <span class="flex w-14 items-center space-x-1 rounded-md bg-gray-300 dark:bg-gray-500">
+                <span class="flex w-14 items-center space-x-1 rounded-md bg-gray-300 dark:bg-gra">
                     <img src="/static/images/clock.svg" alt="clock image" class="h-4 w-4" />
                     <p class="text-xs">{{ event.duration }}m</p>
                 </span>

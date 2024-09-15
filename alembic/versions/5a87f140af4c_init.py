@@ -1,8 +1,8 @@
-"""initial commit
+"""init
 
-Revision ID: 9e048b102225
+Revision ID: 5a87f140af4c
 Revises: 
-Create Date: 2024-09-13 14:17:14.541526
+Create Date: 2024-09-15 19:52:13.071722
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9e048b102225'
+revision: str = '5a87f140af4c'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -40,15 +40,13 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('url', sa.String(), nullable=False),
-    sa.Column('location_url', sa.String(), nullable=False),
+    sa.Column('location_url', sa.String(), nullable=True),
     sa.Column('date', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('is_hidden', sa.Boolean(), server_default=sa.text('0'), nullable=False),
     sa.Column('duration', sa.Integer(), nullable=False),
-    sa.Column('time_type', sa.Enum('DAYS', 'HOURS', 'MINUTES', name='timetype'), nullable=True),
     sa.Column('description', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('user_id')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('booking',
     sa.Column('id', sa.Integer(), nullable=False),
