@@ -3,9 +3,10 @@ from collections.abc import Sequence
 
 from sqlalchemy import Boolean, Integer, String, select, Text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, relationship
 from sqlalchemy import Enum as SQLEnum
 
+from . import Event
 from ..database import Base
 from ..utils.enums import OauthProvider
 
@@ -25,6 +26,7 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     about: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
+
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"
