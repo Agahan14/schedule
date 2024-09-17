@@ -1,12 +1,14 @@
 from __future__ import annotations
+
 from collections.abc import Sequence
 
-from sqlalchemy import Boolean, Integer, String, select, Text
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
+from sqlalchemy import Boolean, Integer, String, Text, select
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, relationship
 
 from ..database import Base
+from ..models import Event
 from ..utils.enums import OauthProvider
 
 
@@ -17,14 +19,14 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     oauth_provider: Mapped[OauthProvider] = mapped_column(SQLEnum(OauthProvider))
     email: str = mapped_column(String(255), unique=True, nullable=True)
     password: str = mapped_column(String(255), nullable=True, default=None)
-    username: Mapped[str] = mapped_column(
-        String, nullable=True, unique=True, default=None
-    )
+    username: Mapped[str] = mapped_column(String, nullable=True, unique=True, default=None)
     picture_url: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     first_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     about: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
+
+    events: Mapped[list[Event]] = relationship("Event", back_populates="user", init=False)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"
@@ -53,7 +55,6 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
             session.rollback()
             print(f"An error occurred: {str(e)}")  # You can replace this with proper logging
             return None
-
 
     @property
     def full_name(self) -> str:

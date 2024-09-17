@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from starlette.templating import Jinja2Templates
 
@@ -16,9 +17,34 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 template_dirs = [
     os.path.join(current_dir, "..", "templates/booking"),
     os.path.join(current_dir, "..", "templates/components"),
+    os.path.join(current_dir, "..", "templates/"),
 ]
 
 templates = Jinja2Templates(directory=template_dirs)
+
+
+@router.get("/", tags=["booking"])
+async def bookings(request: Request, session: Session = Depends(get_db_session)):
+    return RedirectResponse(url="   /upcoming", status_code=301)
+
+
+@router.get("/info/{id}", tags=["booking"])
+async def book_information(id: int, request: Request, session: Session = Depends(get_db_session)):
+    current_user = get_current_user(request=request, session=session)
+    # if not current_user:
+    #     raise HTTPException(status_code=401, detail="Unauthorized")
+    booking = Booking.get_by_id(session, id=id)
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    return templates.TemplateResponse(
+        "book_information.html",
+        {
+            "request": request,
+            "user": current_user,
+            "booking": booking,
+            "timedelta": timedelta,
+        },
+    )
 
 
 @router.get("/upcoming", tags=["booking"])
@@ -31,8 +57,8 @@ async def upcoming(request: Request, session: Session = Depends(get_db_session))
         "upcoming.html",
         {
             "request": request,
-            "bookings": bookings,
             "user": current_user,
+            "bookings": bookings,
             "timedelta": timedelta,
         },
     )

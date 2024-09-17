@@ -1,0 +1,84 @@
+<!-- IN PROGRESS -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Meeting Scheduled</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-lg w-full p-6">
+            <div class="flex justify-center mb-4">
+                <div class="bg-green-600 rounded-full p-2">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-center mb-2">This meeting is scheduled</h2>
+            <p class="text-center text-gray-400 mb-6">All information about meeting is here</p>
+
+            <div class="space-y-4">
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">What</span>
+                    <span class="w-2/3">{{ booking.event.title }}</span>
+                </div>
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">When</span>
+                    <div class="w-2/3">
+                        <p>{{ booking.date.strftime('%H:%M') }}</p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">Duration</span>
+                    <div class="w-2/3">
+                        <p>{{ booking.event.duration }} {{booking.event.time_type.value}}</p>
+                    </div>
+                </div>
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">Who</span>
+                    <div class="w-2/3">{{booking.created_by}}</div>
+                    <div class="w-2/3">{{booking.email}}</div>
+                </div>
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">Where</span>
+                    <div class="w-2/3">{{booking.event.url}}</div>
+                    <span class="w-2/3 flex items-center">
+                        {{ meeting_location }}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 ml-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            />
+                        </svg>
+                    </span>
+                </div>
+                <div class="flex">
+                    <span class="w-1/3 text-gray-400">Additional notes</span>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-gray-400 mb-2">Need to make a change?</p>
+                <a href="{{ reschedule }}" class="text-blue-400 hover:underline mr-2">Reschedule</a>
+                or
+                <a href="{{ cancel }}" class="text-blue-400 hover:underline ml-2">Cancel</a>
+            </div>
+        </div>
+    </body>
+</html>

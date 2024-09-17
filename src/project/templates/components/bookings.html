@@ -1,134 +1,143 @@
 <div class="space-y-4">
     {% for booking in bookings %}
-    <div
-        class="flex flex-col md:flex-row items-start justify-between rounded-lg border transition duration-150 border-gray-800 hover:bg-gray-800 p-4 mb-4"
-    >
-        <div class="mb-2 pr-24 md:mb-0">
-            <div class="text-lg font-semibold">{{ booking.date.strftime('%a, %d %b') }}</div>
-            <div class="text-gray-400">
-                {{ booking.date.strftime('%H:%M') }} - {{ (booking.date +
-                timedelta(minutes=booking.event.duration)).strftime('%H:%M') }}
+    <a href="/booking/info/{{ booking.id }}" class="block group">
+        <div
+            class="flex flex-col md:flex-row items-start justify-between rounded-lg border transition duration-150 border-gray-800 hover:bg-gray-800 p-4 mb-4"
+        >
+            <div class="mb-2 pr-24 md:mb-0">
+                <div class="text-lg font-semibold">{{ booking.date.strftime('%a, %d %b') }}</div>
+                <div class="text-gray-400">
+                    {{ booking.date.strftime('%H:%M') }} - {{ (booking.date +
+                    timedelta(minutes=booking.event.duration)).strftime('%H:%M') }}
+                </div>
+                <div class="mt-1 text-blue-400 no-underline hover:underline">
+                    <a class="flex items-center" href="{{ booking.meeting_url }}" target="_blank">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 120 75"
+                            width="20px"
+                            class="mr-1"
+                        >
+                            <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z" />
+                            <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z" />
+                            <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z" />
+                            <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z" />
+                            <path
+                                fill="#00ac47"
+                                d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"
+                            />
+                            <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
+                        </svg>
+                        Join Google Meet</a
+                    >
+                </div>
             </div>
-            <div class="mt-1 text-blue-400 no-underline hover:underline">
-                <a class="flex items-center" href="{{ booking.meeting_url }}" target="_blank">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 120 75" width="20px" class="mr-1">
-                        <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z" />
-                        <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z" />
-                        <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z" />
-                        <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z" />
-                        <path
-                            fill="#00ac47"
-                            d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"
-                        />
-                        <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
-                    </svg>
-                    Join Google Meet</a
-                >
-            </div>
-        </div>
 
-        <div class="flex-grow md:mx-8">
-            {% if booking.status.value == "canceled" %}
-            <p class="line-through">
-                {{booking.event.duration }} {{ booking.event.time_type.value }} between you and {{ booking.created_by }}
-            </p>
-            {% else %} {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
-            booking.created_by }} {% endif %}
-            <div class="mt-2 text-gray-400">"{{ booking.event.description }}"</div>
+            <div class="flex-grow md:mx-8">
+                {% if booking.status.value == "canceled" %}
+                <p class="line-through">
+                    {{booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
+                    booking.created_by }}
+                </p>
+                {% else %} {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
+                booking.created_by }} {% endif %}
+                <div class="mt-2 text-gray-400">"{{ booking.event.description }}"</div>
+            </div>
+            {% if booking.status.value == "confirmed" %}
+            <div class="flex items-start">
+                <button
+                    class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e8eaed"
+                        class="mr-2"
+                    >
+                        <path
+                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                        />
+                    </svg>
+                    Cancel booking
+                </button>
+                <button
+                    class="flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e8eaed"
+                        class="mr-2"
+                    >
+                        <path
+                            d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
+                        />
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            {% elif booking.status.value =="unconfirmed"%}
+            <div class="flex items-start">
+                <button
+                    class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e8eaed"
+                        class="mr-2"
+                    >
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    </svg>
+                    Confirm booking
+                </button>
+                <button
+                    class="flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e8eaed"
+                        class="mr-2"
+                    >
+                        <path
+                            d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
+                        />
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            {% else %}
+            <div class="flex items-start">
+                <button
+                    class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-red-800"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#e8eaed"
+                        class="mr-2"
+                    >
+                        <path
+                            d="M600-240v-80h160v80H600Zm0-320v-80h280v80H600Zm0 160v-80h240v80H600ZM120-640H80v-80h160v-60h160v60h160v80h-40v360q0 33-23.5 56.5T440-200H200q-33 0-56.5-23.5T120-280v-360Zm80 0v360h240v-360H200Zm0 0v360-360Z"
+                        />
+                    </svg>
+                    Delete
+                </button>
+            </div>
+            {% endif %}
         </div>
-        {% if booking.status.value == "confirmed" %}
-        <div class="flex items-start">
-            <button
-                class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                    class="mr-2"
-                >
-                    <path
-                        d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                    />
-                </svg>
-                Cancel booking
-            </button>
-            <button
-                class="flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                    class="mr-2"
-                >
-                    <path
-                        d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
-                    />
-                </svg>
-                Edit
-            </button>
-        </div>
-        {% elif booking.status.value =="unconfirmed"%}
-        <div class="flex items-start">
-            <button
-                class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                    class="mr-2"
-                >
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                </svg>
-                Confirm booking
-            </button>
-            <button
-                class="flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                    class="mr-2"
-                >
-                    <path
-                        d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"
-                    />
-                </svg>
-                Edit
-            </button>
-        </div>
-        {% else %}
-        <div class="flex items-start">
-            <button
-                class="flex items-center mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-red-800"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                    class="mr-2"
-                >
-                    <path
-                        d="M600-240v-80h160v80H600Zm0-320v-80h280v80H600Zm0 160v-80h240v80H600ZM120-640H80v-80h160v-60h160v60h160v80h-40v360q0 33-23.5 56.5T440-200H200q-33 0-56.5-23.5T120-280v-360Zm80 0v360h240v-360H200Zm0 0v360-360Z"
-                    />
-                </svg>
-                Delete
-            </button>
-        </div>
-        {% endif %}
-    </div>
+    </a>
     {% endfor %}
 </div>
