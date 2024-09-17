@@ -23,18 +23,20 @@
         <div class="mx-auto mt-8 flex w-11/12 flex-col">
             {% for event in events %}
 
-            <div class="space-y-2 rounded-md border border-gray-300 p-5 text-sm dark:border-gray-700">
-                <div class="flex items-center space-x-2">
-                    <p class="text-base font-semibold">{{ event.title }}</p>
-                    <p>/{{ event.url }}</p>
-                </div>
-                <div><p class="font-thin">{{ event.description }}</p></div>
+            <a href="/event/update/{{ event.id }}">
+                <div class="space-y-2 rounded-md border border-gray-300 p-5 text-sm dark:border-gray-700">
+                    <div class="flex items-center space-x-2">
+                        <p class="text-base font-semibold">{{ event.title }}</p>
+                        <p>/{{ event.url }}</p>
+                    </div>
+                    <div><p class="font-thin">{{ event.description }}</p></div>
 
-                <span class="dark:bg-gra flex w-14 items-center space-x-1 rounded-md bg-gray-300">
-                    <img src="/static/images/clock.svg" alt="clock image" class="h-4 w-4" />
-                    <p class="text-xs">{{ event.duration }}m</p>
-                </span>
-            </div>
+                    <span class="dark:bg-gra flex w-14 items-center space-x-1 rounded-md bg-gray-300">
+                        <img src="/static/images/clock.svg" alt="clock image" class="h-4 w-4" />
+                        <p class="text-xs">{{ event.duration }}m</p>
+                    </span>
+                </div>
+            </a>
             {% endfor %}
         </div>
 

@@ -7,7 +7,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="min-h-screen bg-slate-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-        <form class="ml-16 mt-8 flex flex-col space-y-4">
+        <form method="post" action="/event/update/{{ event_id }}" class="ml-16 mt-8 flex flex-col space-y-4">
             <div class="flex h-8 w-11/12 justify-between">
                 <div class="w-9/12">
                     <header class="text-left">
@@ -18,22 +18,24 @@
                 <div
                     class="flex w-1/12 items-center justify-center rounded-md bg-gray-900 text-center dark:bg-slate-100"
                 >
-                    <button class="text-slate-100 dark:text-gray-900">Save</button>
+                    <button type="submit" class="text-slate-100 dark:text-gray-900">Save</button>
                 </div>
             </div>
 
             <div class="rounded-m flex min-w-full flex-col">
                 <div class="flex w-11/12 flex-col space-y-6 rounded-md border border-slate-300 dark:border-slate-700">
                     <div class="mx-auto mt-5 flex w-11/12 flex-col">
-                        <label>Title</label>
+                        <label for="title">Title</label>
                         <input
+                            id="title"
+                            name="title"
                             class="mt-1 h-10 rounded-md border border-slate-300 bg-slate-100 pl-3 font-light placeholder-gray-900 dark:border-slate-700 dark:bg-gray-900 dark:placeholder-slate-100"
                             type="text"
                             placeholder="{{ event.title }}"
                         />
                     </div>
                     <div class="mx-auto flex w-11/12 flex-col">
-                        <label>Description</label>
+                        <label for="description">Description</label>
 
                         <div
                             class="relative mt-1 flex h-28 flex-col rounded-md border border-slate-300 bg-slate-100 pl-3 pt-12 font-light dark:border-slate-700 dark:bg-gray-900"
@@ -48,6 +50,8 @@
                             </div>
 
                             <input
+                                id="description"
+                                name="description"
                                 class="h-3/4 bg-slate-100 pt-6 placeholder-gray-900 dark:bg-gray-900 dark:placeholder-slate-100"
                                 type="text"
                                 placeholder="{{ event.description }}"
@@ -55,11 +59,13 @@
                         </div>
                     </div>
                     <div class="mx-auto flex w-11/12 flex-col">
-                        <label>URL</label>
+                        <label for="url">URL</label>
                         <input
+                            id="url"
+                            name="url"
                             class="mb-6 mt-1 h-10 rounded-md border border-slate-300 bg-slate-100 pb-1 pl-3 font-light placeholder-gray-900 dark:border-slate-700 dark:bg-gray-900 dark:placeholder-slate-100"
                             type="text"
-                            placeholder="{{ event.url }}"
+                            value="{{ event.url }}"
                         />
                     </div>
                 </div>
@@ -68,13 +74,15 @@
             <div class="flex min-w-full flex-col rounded-md">
                 <div class="flex w-11/12 flex-col space-y-6 rounded-md border border-slate-300 dark:border-slate-700">
                     <div class="mx-auto mt-5 flex w-11/12 flex-col">
-                        <label>Duration</label>
+                        <label for="duration">Duration</label>
 
                         <div class="flex justify-between">
                             <input
+                                id="duration"
+                                name="duration"
                                 class="mb-6 mt-1 h-10 w-11/12 rounded-l-md border border-slate-300 bg-slate-100 pl-3 font-thin placeholder-gray-900 dark:border-slate-700 dark:bg-gray-900 dark:placeholder-slate-100"
-                                type="text"
-                                placeholder="{{ event.duration }}"
+                                type="number"
+                                value="{{ event.duration }}"
                             />
                             <div
                                 class="mt-1 flex h-10 w-1/12 items-center justify-center rounded-r-md bg-gray-300 text-gray-900"
@@ -89,8 +97,10 @@
             <div class="flex min-w-full flex-col rounded-md">
                 <div class="flex w-11/12 flex-col space-y-6 rounded-md border border-slate-300 dark:border-slate-700">
                     <div class="mx-auto mt-5 flex w-11/12 flex-col">
-                        <label>Location</label>
+                        <label for="location">Location</label>
                         <input
+                            id="location"
+                            name="location"
                             class="mb-6 mt-1 h-10 rounded-md border border-slate-300 bg-slate-100 pl-3 font-light placeholder-gray-900 dark:border-slate-700 dark:bg-gray-900 dark:placeholder-slate-100"
                             type="text"
                             placeholder="{{ event.location_url }}"

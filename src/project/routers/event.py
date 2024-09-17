@@ -63,8 +63,22 @@ async def events(request: Request, session: Session = Depends(get_db_session)):
     )
 
 
-@router.get("/{event_id}/", tags=["event"])
-async def event(event_id: int, request: Request, session: Session = Depends(get_db_session)):
+@router.get("/update/{event_id}", tags=["event"])
+async def get_update_form(request: Request, event_id: int, session: Session = Depends(get_db_session)):
+    event = Event.get_by_id(session, event_id=event_id)
+    return templates.TemplateResponse("update_event.html", {"request": request, "event_id": event_id, "event": event})
+
+
+@router.post("/update/{event_id}", tags=["event"], response_class=HTMLResponse)
+async def event(
+    request: Request,
+    event_id: int,
+    title: Annotated[str, Form()] = None,
+    description: Annotated[str, Form()] = None,
+    url: Annotated[str, Form()] = None,
+    duration: Annotated[int, Form()] = None,
+    session: Session = Depends(get_db_session),
+):
     current_user = get_current_user(request=request, session=session)
 
     if not current_user:
@@ -74,7 +88,17 @@ async def event(event_id: int, request: Request, session: Session = Depends(get_
     if not event and event.user_id == current_user:
         raise HTTPException(status_code=404, detail="Event not found.")
 
-    return templates.TemplateResponse(
-        "update_event.html",
-        {"request": request, "event": event},
-    )
+    if title:
+        event.title = title
+    if description:
+        event.description = description
+    if url:
+        event.url = url
+    if duration:
+        event.duration = duration
+
+    session.add(event)
+    session.commit()
+    session.refresh(event)
+
+    return RedirectResponse(url=f"/event/update/{event_id}", status_code=303)
