@@ -1,0 +1,126 @@
+{% extends "base.html" %} {% block content %}
+<div class="flex min-h-screen">
+    {% include "layouts/index_sidebar.html" %}
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-zinc-950 p-8">
+        <div class="flex flex-col border border-white">
+            <div class="mx-auto w-3/4 bg-zinc-950 p-6">
+                {% for schedule in availability.work_schedule %}
+                <div class="flex items-center gap-2">
+                    <label class="inline-flex items-center">
+                        <input
+                            type="checkbox"
+                            name="active"
+                            class="form-checkbox h-5 w-5 text-gray-600"
+                            data-schedule-id="{{ loop.index }}"
+                            {%
+                            if
+                            schedule.active
+                            %}
+                            checked
+                            {%
+                            endif
+                            %}
+                        />
+                    </label>
+
+                    <label>
+                        <input
+                            type="text"
+                            name="day_of_week"
+                            class="rounded bg-gray-700 px-2 py-1 text-white"
+                            value="{{ schedule.day_of_week }}"
+                            data-schedule-id="{{ loop.index }}"
+                            readonly
+                        />
+                    </label>
+
+                    <label class="inline-flex items-center">
+                        <input
+                            type="time"
+                            name="time_from"
+                            value="{{ schedule.time_from }}"
+                            class="rounded bg-gray-700 px-2 py-1 text-white"
+                            data-schedule-id="{{ loop.index }}"
+                        />
+                    </label>
+
+                    <span class="text-white">-</span>
+
+                    <label class="inline-flex items-center">
+                        <input
+                            type="time"
+                            name="time_to"
+                            value="{{ schedule.time_to }}"
+                            class="rounded bg-gray-700 px-2 py-1 text-white"
+                            data-schedule-id="{{ loop.index }}"
+                        />
+                    </label>
+                </div>
+                {% endfor %}
+                <button
+                    id="submit-button"
+                    onclick="get_input_value({{ availability.id }})"
+                    class="rounded bg-blue-500 px-4 py-2 text-white"
+                >
+                    Submit
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function get_input_value(availabilityId) {
+        let data = [];
+        let schedules = {};
+
+        document.querySelectorAll("[data-schedule-id]").forEach((element) => {
+            let scheduleId = element.getAttribute("data-schedule-id");
+            if (!schedules[scheduleId]) {
+                schedules[scheduleId] = {};
+            }
+
+            switch (element.getAttribute("name")) {
+                case "active":
+                    schedules[scheduleId].active = element.checked;
+                    break;
+                case "day_of_week":
+                    schedules[scheduleId].day_of_week = element.value;
+                    break;
+                case "time_from":
+                    schedules[scheduleId].time_from = element.value;
+                    break;
+                case "time_to":
+                    schedules[scheduleId].time_to = element.value;
+                    break;
+            }
+        });
+
+        for (let key in schedules) {
+            data.push(schedules[key]);
+        }
+
+        console.log(JSON.stringify(data, null, 2));
+
+        let url = `/availability_detail/${availabilityId}`;
+        console.log(url);
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+</script>
+{% endblock %}

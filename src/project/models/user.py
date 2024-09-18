@@ -3,10 +3,8 @@ from collections.abc import Sequence
 
 from sqlalchemy import Boolean, Integer, String, select, Text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, relationship
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
 from sqlalchemy import Enum as SQLEnum
-
-from . import Event
 from ..database import Base
 from ..utils.enums import OauthProvider
 

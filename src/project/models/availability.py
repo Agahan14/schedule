@@ -1,51 +1,58 @@
+from __future__ import annotations
 from typing import List
 from sqlalchemy import (
     Boolean,
     ForeignKey,
     Integer,
-    String, JSON,
+    String, JSON, select,
 )
 
-from sqlalchemy.orm import Mapped, MappedAsDataclass, mapped_column, relationship, backref
+from sqlalchemy.orm import Mapped, MappedAsDataclass, mapped_column, relationship, backref, Session
 
 from ..database import Base
 
 
-class WorkSchedule(MappedAsDataclass, Base):
-    __tablename__ = "work_schedule"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    availability_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("availability.id", ondelete="CASCADE"), nullable=False
-    )
-    work_schedule: Mapped[dict] = mapped_column(JSON, nullable=True)
-    availability = relationship("Availability", backref=backref("events", passive_deletes=True))
-
+# class WorkSchedule(MappedAsDataclass, Base):
+#     __tablename__ = "work_schedule"
+#
+#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+#     availability_id: Mapped[int] = mapped_column(
+#         Integer, ForeignKey("availability.id", ondelete="CASCADE"), nullable=False
+#     )
+#     work_schedule: Mapped[dict] = mapped_column(JSON, nullable=True)
+#     availability = relationship("Availability", backref=backref("work_schedules", passive_deletes=True))
+#
 
 class Availability(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "availability"
 
     id: Mapped[int] = mapped_column(Integer, init=False, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False, unique=False)
-    schedule: Mapped[List[WorkSchedule]] = relationship(
-        "WorkSchedule", back_populates="availability", cascade="all, delete-orphan"
-    )
+    # schedule: Mapped[List[WorkSchedule]] = relationship(
+    #     "WorkSchedule", back_populates="availability", cascade="all, delete-orphan"
+    # )
 
     user_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("user.id", ondelete="CASCADE"),
         nullable=False,
-        unique=True,
         init=False,
     )
-    event_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("event.id", ondelete="CASCADE"),
-        nullable=False,
-        unique=True,
-        init=False,
+    user: Mapped["User"] = relationship( #type: ignore
+        "User", backref=backref("availabilities", cascade="all, delete-orphan")
     )
+    work_schedule: Mapped[dict] = mapped_column(JSON, nullable=True)
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    @staticmethod
+    def get_by_id(session: Session, id: int) -> Availability | None:
+        return session.scalar(select(Availability).where(Availability.id == int(id)))
+    @staticmethod
+    def get_user_availability(session: Session, aval_id: int, user_id: int) -> Availability | None:
+        return session.scalar(select(Availability).where(Availability.id == int(aval_id),
+                                                         Availability.user_id == user_id))
+
+
 
 
 

@@ -173,7 +173,8 @@ async def google_callback(
     response = login_user(user=user, redirect_url="/index")
     return response
 
-#Returns index page
+
+# Returns index page
 @router.get("/index", tags=["auth"])
 async def get_index(request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request, session)
@@ -182,7 +183,7 @@ async def get_index(request: Request, session: Session = Depends(get_db_session)
     return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
 
 
-#Returns the update page and updates the user detail
+# Returns the update page and updates the user detail
 @router.api_route("/settings", methods=["GET", "POST"], tags=["auth"], response_model=None)
 async def settings(
     request: Request,
@@ -223,7 +224,8 @@ async def settings(
             )
         return RedirectResponse(url="/settings", status_code=303)
 
-#Deletes the account
+
+# Deletes the account
 @router.delete("/delete_account/{user_id}", tags=["auth"])
 async def delete_account(user_id: int, session: Session = Depends(get_db_session)):
     User.delete(session, user_id)
