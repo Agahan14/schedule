@@ -4,17 +4,17 @@
     {% include "layouts/index_sidebar.html" %}
 
     <!-- Main Content -->
-    <main class="flex-1 bg-zinc-950 p-8">
-        <h1 class="text-3xl font-bold text-white">Availability</h1>
-        <p class="mt-4 text-white">Configure times when you are available for bookings.</p>
+    <main class="flex h-screen w-full flex-col bg-zinc-950 p-8">
+        <div class="mb-4">
+            <h1 class="text-3xl font-bold text-white">Availability</h1>
+            <p class="text-white">Configure times when you are available for bookings.</p>
+        </div>
         {% for availability in user.availabilities %}
-        <div class="flex h-40 flex-row border border-white">
-            <div class="flex flex-col border-white">
-                <h2 class="text-2xl font-bold text-white">
-                    <a href="/availability_detail/{{ availability.id }}">{{ availability.name }}</a>
-                </h2>
-                <h4 class="text-xs text-white">Monday 22:00</h4>
-            </div>
+        <div class="flex h-40 flex-col border border-white hover:bg-zinc-500">
+            <h2 class="m-2 text-2xl font-bold text-white">
+                <a href="/availability_detail/{{ availability.id }}">{{ availability.name }}</a>
+            </h2>
+            <h4 class="m-2 text-xs text-white">Monday 22:00</h4>
         </div>
 
         {% endfor %}

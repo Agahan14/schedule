@@ -1,126 +1,151 @@
 {% extends "base.html" %} {% block content %}
-<div class="flex min-h-screen">
-    {% include "layouts/index_sidebar.html" %}
+    <div class="flex min-h-screen">
+        {% include "layouts/index_sidebar.html" %}
 
-    <!-- Main Content -->
-    <main class="flex-1 bg-zinc-950 p-8">
-        <div class="flex flex-col border border-white">
-            <div class="mx-auto w-3/4 bg-zinc-950 p-6">
-                {% for schedule in availability.work_schedule %}
-                <div class="flex items-center gap-2">
-                    <label class="inline-flex items-center">
-                        <input
-                            type="checkbox"
-                            name="active"
-                            class="form-checkbox h-5 w-5 text-gray-600"
-                            data-schedule-id="{{ loop.index }}"
-                            {%
-                            if
-                            schedule.active
-                            %}
-                            checked
-                            {%
-                            endif
-                            %}
-                        />
-                    </label>
+        <!-- Main Content -->
+        <main class="flex-1 bg-zinc-950 p-8">
+            <div class="flex w-3/4 flex-col border border-white">
+                <div class="mx-auto w-3/4 bg-zinc-950 p-6">
+                    {% for schedule in availability.work_schedule %}
+                        <div class="my-4 flex items-center gap-2">
+                            <label class="inline-flex cursor-pointer items-center">
+                                <input
+                                    type="checkbox"
+                                    name="active"
+                                    class="peer"
+                                    data-schedule-id="{{ loop.index }}"
+                                    {% if
+                            schedule.active %}
+                                    checked
+                                    {% endif %}
+                                    onchange="toggleTimeFields(this, {{ loop.index }}); get_input_value({{ availability.id }});simulateButtonClick();"
+                                />
+                            </label>
 
-                    <label>
-                        <input
-                            type="text"
-                            name="day_of_week"
-                            class="rounded bg-gray-700 px-2 py-1 text-white"
-                            value="{{ schedule.day_of_week }}"
-                            data-schedule-id="{{ loop.index }}"
-                            readonly
-                        />
-                    </label>
+                            <label>
+                                <input
+                                    type="text"
+                                    name="day_of_week"
+                                    class="rounded bg-gray-700 px-2 py-1 text-white"
+                                    value="{{ schedule.day_of_week }}"
+                                    data-schedule-id="{{ loop.index }}"
+                                    readonly
+                                />
+                            </label>
+                            <!-- Time fields container -->
+                            <div
+                                id="time-fields-{{ loop.index }}"
+                                class="flex gap-2"
+                                {% if
+                        not
+                        schedule.active %}
+                                style="display: none"
+                                {% endif %}
+                            >
+                                <!-- Initially hide if not active -->
+                                <label class="inline-flex items-center">
+                                    <input
+                                        type="time"
+                                        name="time_from"
+                                        value="{{ schedule.time_from }}"
+                                        class="rounded bg-gray-700 px-2 py-1 text-white"
+                                        data-schedule-id="{{ loop.index }}"
+                                    />
+                                </label>
 
-                    <label class="inline-flex items-center">
-                        <input
-                            type="time"
-                            name="time_from"
-                            value="{{ schedule.time_from }}"
-                            class="rounded bg-gray-700 px-2 py-1 text-white"
-                            data-schedule-id="{{ loop.index }}"
-                        />
-                    </label>
+                                <span class="text-white">-</span>
 
-                    <span class="text-white">-</span>
-
-                    <label class="inline-flex items-center">
-                        <input
-                            type="time"
-                            name="time_to"
-                            value="{{ schedule.time_to }}"
-                            class="rounded bg-gray-700 px-2 py-1 text-white"
-                            data-schedule-id="{{ loop.index }}"
-                        />
-                    </label>
+                                <label class="inline-flex items-center">
+                                    <input
+                                        type="time"
+                                        name="time_to"
+                                        value="{{ schedule.time_to }}"
+                                        class="rounded bg-gray-700 px-2 py-1 text-white"
+                                        data-schedule-id="{{ loop.index }}"
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <button
+                        id="submit-button"
+                        onclick="get_input_value({{ availability.id }})"
+                        class="my-4 rounded-lg bg-gray-700 px-6 py-2 font-semibold text-white shadow-md transition-all duration-300 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 active:bg-blue-700"
+                    >
+                        Submit
+                    </button>
                 </div>
-                {% endfor %}
-                <button
-                    id="submit-button"
-                    onclick="get_input_value({{ availability.id }})"
-                    class="rounded bg-blue-500 px-4 py-2 text-white"
-                >
-                    Submit
-                </button>
             </div>
-        </div>
-    </main>
-</div>
+        </main>
+    </div>
 
-<script>
-    function get_input_value(availabilityId) {
-        let data = [];
-        let schedules = {};
-
-        document.querySelectorAll("[data-schedule-id]").forEach((element) => {
-            let scheduleId = element.getAttribute("data-schedule-id");
-            if (!schedules[scheduleId]) {
-                schedules[scheduleId] = {};
+    <script>
+        function toggleTimeFields(checkbox, index) {
+            const timeFields = document.getElementById(`time-fields-${index}`);
+            if (checkbox.checked) {
+                timeFields.style.display = "flex";
+            } else {
+                timeFields.style.display = "none";
             }
-
-            switch (element.getAttribute("name")) {
-                case "active":
-                    schedules[scheduleId].active = element.checked;
-                    break;
-                case "day_of_week":
-                    schedules[scheduleId].day_of_week = element.value;
-                    break;
-                case "time_from":
-                    schedules[scheduleId].time_from = element.value;
-                    break;
-                case "time_to":
-                    schedules[scheduleId].time_to = element.value;
-                    break;
-            }
-        });
-
-        for (let key in schedules) {
-            data.push(schedules[key]);
         }
 
-        console.log(JSON.stringify(data, null, 2));
+        function get_input_value(availabilityId) {
+            let data = [];
+            let schedules = {};
 
-        let url = `/availability_detail/${availabilityId}`;
-        console.log(url);
+            document.querySelectorAll("[data-schedule-id]").forEach((element) => {
+                let scheduleId = element.getAttribute("data-schedule-id");
+                if (!schedules[scheduleId]) {
+                    schedules[scheduleId] = {};
+                }
 
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Success:", data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+                switch (element.getAttribute("name")) {
+                    case "active":
+                        schedules[scheduleId].active = element.checked;
+                        break;
+                    case "day_of_week":
+                        schedules[scheduleId].day_of_week = element.value;
+                        break;
+                    case "time_from":
+                        schedules[scheduleId].time_from = element.value;
+                        break;
+                    case "time_to":
+                        schedules[scheduleId].time_to = element.value;
+                        break;
+                }
             });
+
+            for (let key in schedules) {
+                data.push(schedules[key]);
+            }
+
+            let url = `/availability_detail/${availabilityId}`;
+            console.log(data);
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Success:", data);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+
+     function simulateButtonClick() {
+        const button = document.getElementById('submit-button');
+
+        button.classList.add('active:bg-blue-700', 'active:scale-95');
+
+        setTimeout(() => {
+            button.classList.remove('active:bg-blue-700', 'active:scale-95');
+        }, 200);
     }
-</script>
+    </script>
 {% endblock %}
