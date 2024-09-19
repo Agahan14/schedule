@@ -6,7 +6,14 @@ module.exports = {
     "./src/project/static/scripts/**/*.{js,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+
+      borderWidth: {
+        '0.5': '0.5px',  // Custom border width
+      },
+
+     
+    },
   },
   plugins: [
     require("@tailwindcss/forms"),
