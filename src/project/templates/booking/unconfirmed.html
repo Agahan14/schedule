@@ -2,40 +2,40 @@
 <div class="flex">
     {% import "layouts/index_sidebar.html" as sidebar %} {{ sidebar.render(user) }}
     <div class="bg-gray-800"></div>
-    <div class="flex-1 p-8 bg-gray-900 text-white">
+    <div class="flex-1 bg-gray-900 p-8 text-white">
         <h1 class="mb-4 text-2xl font-bold">Bookings</h1>
         <p class="mb-6 text-gray-400">See upcoming and past events booked through your event type links.</p>
-        <div class="mb-6 flex justify-between items-center">
+        <div class="mb-6 flex items-center justify-between">
             <div>
                 <a
                     href="upcoming"
-                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:scale-95 hover:bg-gray-600"
                 >
                     Upcoming
                 </a>
                 <a
-                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 bg-gray-700 hover:bg-gray-600 hover:scale-95"
+                    class="mr-2 rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:scale-95 hover:bg-gray-600"
                 >
                     Unconfirmed
                 </a>
                 <a
                     href="past"
-                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:scale-95 hover:bg-gray-600"
                 >
                     Past
                 </a>
                 <a
                     href="canceled"
-                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:bg-gray-600 hover:scale-95"
+                    class="mr-2 rounded-md px-4 py-2 text-white transition duration-300 hover:scale-95 hover:bg-gray-600"
                 >
                     Canceled
                 </a>
             </div>
             <a
                 href="filter"
-                class="flex items-center rounded-md px-4 py-2 text-white transition duration-300 bg-gray-700 hover:bg-gray-600 hover:scale-95"
+                class="flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:scale-95 hover:bg-gray-600"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 -960 960 960" fill="#e8eaed">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-6 w-6" viewBox="0 -960 960 960" fill="#e8eaed">
                     <path d="M400-240v-80h160v80H400ZM240-440v-80h480v80H240ZM120-640v-80h720v80H120Z" />
                 </svg>
                 Filters
