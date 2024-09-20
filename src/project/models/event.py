@@ -11,7 +11,6 @@ from sqlalchemy import (
     Integer,
     String,
     desc,
-    asc,
     func,
     select,
     sql
@@ -46,8 +45,8 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         return (session.scalars(select(Event))).all()
 
     @staticmethod
-    def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Event] | None:
-        return session.scalars((select(Event).where(Event.user_id == user_id)).order_by(Event.date)).all()
+    def get_all_by_user_id(session: Session, user_id: int, offset: int, limit: int) -> Sequence[Event] | None:
+        return session.scalars((select(Event).where(Event.user_id == user_id)).offset(offset).limit(limit).order_by(desc(Event.id))).all()
 
 
 class Booking(MappedAsDataclass, Base, unsafe_hash=True):
