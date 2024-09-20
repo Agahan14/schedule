@@ -40,6 +40,10 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
         return session.scalar(select(User).where(User.id == int(id)))
 
     @staticmethod
+    def get_by_username(session: Session, username: str) -> User | None:
+        return session.scalar(select(User).where(User.username == username))
+
+    @staticmethod
     def get_by_email(session: Session, email: str) -> User | None:
         return session.scalar(select(User).where(User.email == email))
 

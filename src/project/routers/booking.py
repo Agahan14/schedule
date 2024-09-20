@@ -1,31 +1,19 @@
-import os
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from starlette.templating import Jinja2Templates
 
-from src.project.utils.enums import BookingStatus
-
-from ..dependencies import get_current_user, get_db_session
+from ..dependencies import get_current_user, get_db_session, templates
 from ..models import Booking
+from ..utils.enums import BookingStatus
 
 router = APIRouter(prefix="/booking")
-
-current_dir = os.path.dirname(os.path.realpath(__file__))
-template_dirs = [
-    os.path.join(current_dir, "..", "templates/booking"),
-    os.path.join(current_dir, "..", "templates/components"),
-    os.path.join(current_dir, "..", "templates/"),
-]
-
-templates = Jinja2Templates(directory=template_dirs)
 
 
 @router.get("/")
 async def index(request: Request, session: Session = Depends(get_db_session)):
-    return RedirectResponse(url="/upcoming", status_code=301)
+    return RedirectResponse(url="booking/upcoming", status_code=301)
 
 
 @router.get("/info/{id}", tags=["booking"])
@@ -38,7 +26,7 @@ async def book_information(id: int, request: Request, session: Session = Depends
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
     return templates.TemplateResponse(
-        "book_information.html",
+        "booking/book_information.html",
         {
             "request": request,
             "user": current_user,
@@ -56,7 +44,7 @@ async def upcoming(request: Request, session: Session = Depends(get_db_session))
     #     raise HTTPException(status_code=401, detail="Unauthorized")
     bookings = Booking.get_all_upcoming_by_user_id(session, user_id=1)
     return templates.TemplateResponse(
-        "upcoming.html",
+        "booking/upcoming.html",
         {
             "request": request,
             "user": current_user,
@@ -73,7 +61,7 @@ async def uncomfirmed(request: Request, session: Session = Depends(get_db_sessio
     #     raise HTTPException(status_code=401, detail="Unauthorized")
     bookings = Booking.get_all_unconfirmed_by_user_id(session, user_id=1)
     return templates.TemplateResponse(
-        "unconfirmed.html",
+        "booking/unconfirmed.html",
         {
             "request": request,
             "bookings": bookings,
@@ -90,7 +78,7 @@ async def canceled(request: Request, session: Session = Depends(get_db_session))
     #     raise HTTPException(status_code=401, detail="Unauthorized")
     bookings = Booking.get_all_canceled_by_user_id(session, user_id=1)
     return templates.TemplateResponse(
-        "canceled.html",
+        "booking/canceled.html",
         {
             "request": request,
             "bookings": bookings,
@@ -107,7 +95,7 @@ async def past(request: Request, session: Session = Depends(get_db_session)):
     #     raise HTTPException(status_code=401, detail="Unauthorized")
     bookings = Booking.get_all_past_bookings_by_user_id(session, user_id=1)
     return templates.TemplateResponse(
-        "past.html",
+        "booking/past.html",
         {
             "request": request,
             "bookings": bookings,
@@ -117,7 +105,7 @@ async def past(request: Request, session: Session = Depends(get_db_session)):
     )
 
 
-@router.post(f"/cancel/{id}", tags=["booking"])
+@router.post(f"/booking/cancel/{id}", tags=["booking"])
 async def cancel(booking_id: int, request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
     # if not current_user:
@@ -136,7 +124,7 @@ async def cancel(booking_id: int, request: Request, session: Session = Depends(g
     session.refresh(booking)
 
 
-@router.delete(f"/delete/{id}", tags=["booking"])
+@router.delete(f"/booking/delete/{id}", tags=["booking"])
 async def delete_booking(booking_id: int, request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
     booking = session.get(Booking, booking_id)
