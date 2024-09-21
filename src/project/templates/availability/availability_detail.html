@@ -1,18 +1,18 @@
 {% extends "base.html" %} {% block content %}
 <div class="flex min-h-screen">
-    {% include "layouts/index_sidebar.html" %}
+    {% include "/components/index_sidebar.html" %}
 
     <!-- Main Content -->
-    <main class="flex-1 bg-zinc-950 p-8">
-        <div class="flex w-3/4 flex-col border border-white">
-            <div class="mx-auto w-3/4 bg-zinc-950 p-6">
+    <main class="flex-1 bg-[#1A1A1A] p-8">
+        <div class="flex w-3/4 flex-col rounded-md border border-[#383838]">
+            <div class="mx-auto w-3/4 bg-[#1A1A1A] p-6">
                 {% for schedule in availability.work_schedule %}
                 <div class="my-4 flex items-center gap-2">
                     <label class="inline-flex cursor-pointer items-center">
                         <input
                             type="checkbox"
                             name="active"
-                            class="peer"
+                            class="peer sr-only"
                             data-schedule-id="{{ loop.index }}"
                             {%
                             if
@@ -24,6 +24,9 @@
                             %}
                             onchange="toggleTimeFields(this, {{ loop.index }}); get_input_value({{ availability.id }});simulateButtonClick();"
                         />
+                        <div
+                            class="peer relative h-6 w-11 rounded-full bg-[#404040] after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-[#1A1A1A] after:bg-[#1A1A1A] after:transition-all after:content-[''] peer-checked:bg-[#E1E1E1] peer-checked:after:translate-x-full peer-checked:after:border-[#1A1A1A] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800 rtl:peer-checked:after:-translate-x-full"
+                        ></div>
                     </label>
 
                     <label>
