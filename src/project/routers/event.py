@@ -55,6 +55,9 @@ async def create(
 async def events(request: Request, page: int = Query(1, ge=1), session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
 
+    if not current_user:
+        raise HTTPException(status_code=401)
+
     page_size = 5
     offset = (page - 1) * page_size
 
@@ -62,25 +65,32 @@ async def events(request: Request, page: int = Query(1, ge=1), session: Session 
 
     events = Event.get_all_by_user_id(session, current_user.id, limit=page_size, offset=offset)
 
-    if not current_user:
-        raise HTTPException(status_code=401)
+    total_items = Event.count_events_by_user_id(session, current_user.id)
+
+    total_pages = (total_items + page_size - 1) // page_size
+
+    page_range = range(1, total_pages + 1)
+
     return templates.TemplateResponse(
         "event/event.html",
-        {"request": request, 
-         "events": events,
-         "page": page,
-        "per_page": page_size,
-        "total_pages": 5,
-        "total_items":5,
-        "page_range": page_range
-           },
+        {
+            "request": request,
+            "events": events,
+            "page": page,
+            "per_page": page_size,
+            "total_pages": total_pages,
+            "total_items": total_items,
+            "page_range": page_range,
+        },
     )
 
 
 @router.get("/update/{event_id}", tags=["event"])
 async def get_update_form(request: Request, event_id: int, session: Session = Depends(get_db_session)):
     event = Event.get_by_id(session, event_id=event_id)
-    return templates.TemplateResponse("event/update_event.html", {"request": request, "event_id": event_id, "event": event})
+    return templates.TemplateResponse(
+        "event/update_event.html", {"request": request, "event_id": event_id, "event": event}
+    )
 
 
 @router.post("/update/{event_id}", tags=["event"], response_class=HTMLResponse)

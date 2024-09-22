@@ -49,6 +49,11 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         return session.scalars((select(Event).where(Event.user_id == user_id)).offset(offset).limit(limit).order_by(desc(Event.id))).all()
 
 
+    @staticmethod
+    def count_events_by_user_id(session: Session, user_id: int) -> int:
+        return session.execute(select(func.count(Event.id)).where(Event.user_id == user_id)).scalar()
+
+
 class Booking(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "booking"
 
