@@ -1,0 +1,174 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="flex min-h-screen">
+    {% include "layouts/index_sidebar.html" %}
+
+    <main class="w-full bg-zinc-950 p-8 text-white">
+        <section class="flex justify-between items-center">
+            <div>
+                <h1 class="font-bold text-xl">Events</h1>
+                <p class="text-zinc-400">Create events to share for people to book on your calendar.</p>
+            </div>
+            <button class="py-1.5 px-3 rounded-md bg-white text-black flex gap-3 justify-center items-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-4"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span class="text-sm">New</span>
+            </button>
+        </section>
+        <section class="mt-5 flex flex-col border rounded-lg border-zinc-400 divide-y divide-zinc-400">
+            {% for _ in range(10) %}
+            <div class="flex justify-between py-4 px-8 hover:bg-zinc-800 transition-colors ease-in-out">
+                <div class="flex flex-col gap-2">
+                    <span class="space-x-1">
+                        <span class="font-medium text-lg">Event 1</span>
+                        <span class="text-zinc-400 text-sm">/asdfjkl/ajdsfkl</span>
+                    </span>
+                    <ul class="flex gap-2">
+                        <li
+                            class="py-1 px-[6px] bg-zinc-600 text-text rounded-md text-xs flex gap-1 justify-center items-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                            60
+                        </li>
+                        <li
+                            class="py-1 px-[6px] bg-zinc-600 text-text rounded-md text-xs flex gap-1 justify-center items-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                            120
+                        </li>
+                        <li
+                            class="py-1 px-[6px] bg-zinc-600 text-text rounded-md text-xs flex gap-1 justify-center items-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                            180
+                        </li>
+                        <li
+                            class="py-1 px-[6px] bg-zinc-600 text-text rounded-md text-xs flex gap-1 justify-center items-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                            240
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex justify-center items-center gap-3">
+                    <button>tgl</button>
+                    <div
+                        class="flex justify-center items-center border border-zinc-400 divide-zinc-400 rounded-lg divide-x"
+                    >
+                        <a href=""
+                            ><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-5 m-2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                />
+                            </svg>
+                        </a>
+                        <a href="">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-5 m-2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                                />
+                            </svg>
+                        </a>
+                        <a href=""
+                            ><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-5 m-2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+</div>
+
+{% endblock %}
