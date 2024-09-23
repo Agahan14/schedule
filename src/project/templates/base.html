@@ -13,8 +13,10 @@
     </head>
     <!-- prettier-ignore -->
     {#{% import "components/test.html" as test %}#}
-{#{{ test.render() }}#}
-
+    {#{{ test.render() }}#}
+    {% import "components/create_event.html" as create_event %}
+    {{ create_event.render() }}
+    
     <body class="" id="app">
         {% block content %} {% endblock %}
     </body>

@@ -1,15 +1,21 @@
+<!-- prettier-ignore -->
 {% extends "base.html" %} {% block content %}
 
 <div class="flex min-h-screen">
     {% include "layouts/index_sidebar.html" %}
 
     <main class="w-full bg-zinc-950 p-8 text-white">
+        <create-event @closecreateevent="createEventOpened=false" v-if="createEventOpened"></create-event>
+
         <section class="flex justify-between items-center">
             <div>
                 <h1 class="font-bold text-xl">Events</h1>
                 <p class="text-zinc-400">Create events to share for people to book on your calendar.</p>
             </div>
-            <button class="py-1.5 px-3 rounded-md bg-white text-black flex gap-3 justify-center items-center">
+            <button
+                @click="createEventOpened=true"
+                class="py-1.5 px-3 rounded-md bg-white text-black flex gap-3 justify-center items-center"
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
