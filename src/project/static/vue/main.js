@@ -1,10 +1,10 @@
 createApp({
-  components: {
-    TestComponent,
-  },
-  data() {
-    return {
-      testOpened: false,
-    };
-  },
+    components: {
+        TestComponent,
+    },
+    data() {
+        return {
+            testOpened: false,
+        };
+    },
 }).mount("#app");
