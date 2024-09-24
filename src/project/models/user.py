@@ -1,12 +1,13 @@
 from __future__ import annotations
-from collections.abc import Sequence
 
-from sqlalchemy import Boolean, Integer, String, select, Text
+from collections.abc import Sequence
+from sqlalchemy import Boolean, Integer, String, Text, select
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, relationship
-from sqlalchemy import Enum as SQLEnum
 
 from ..database import Base
+from ..models import Event
 from ..utils.enums import OauthProvider
 from ..models import Event
 
@@ -25,7 +26,7 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     about: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
 
-    events: Mapped[list[Event]]  = relationship("Event",  back_populates="user", init=False)
+    events: Mapped[list[Event]] = relationship("Event", back_populates="user", init=False)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"
@@ -37,6 +38,10 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     @staticmethod
     def get_by_id(session: Session, id: int) -> User | None:
         return session.scalar(select(User).where(User.id == int(id)))
+
+    @staticmethod
+    def get_by_username(session: Session, username: str) -> User | None:
+        return session.scalar(select(User).where(User.username == username))
 
     @staticmethod
     def get_by_email(session: Session, email: str) -> User | None:
