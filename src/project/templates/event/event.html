@@ -1,0 +1,124 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="flex min-h-screen w-full">
+    <!-- prettier-ignore -->
+    {% import "components/index_sidebar.html" as sidebar %} 
+    {{ sidebar.render(user) }}
+
+    <main class="min-h-screen bg-gray-900 text-gray-100 w-full p-6">
+        <div class="mx-auto mt-10">
+            <div class="flex justify-between">
+                <span>
+                    <h1 class="text-xl font-bold">Event Types</h1>
+                    <p class="text-sm">Create events to share for people to book on your calendar.</p>
+                </span>
+                <span
+                    class="flex h-10 w-20 items-center justify-center rounded-lg hover:bg-slate-600 bg-gray-100 text-gray-900"
+                >
+                    <a href="/event/create"><span>+</span> New</a>
+                </span>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-col">
+            {% for event in events %}
+
+            <a href="/event/update/{{ event.id }}">
+                <div class="space-y-2 rounded-md border p-5 text-sm border-gray-700">
+                    <div class="flex justify-between">
+                        <div class="space-y-1">
+                            <div class="flex items-center space-x-1">
+                                <p class="text-base font-semibold">{{ event.title }}</p>
+                                <p>/{{ event.url }}</p>
+                            </div>
+                            <div><p class="font-thin">{{ event.description }}</p></div>
+
+                            <span class="inline-flex items-center space-x-1 rounded-md bg-slate-700">
+                                <img src="/static/images/clock.svg" alt="clock image" class="h-4 w-5" />
+                                <p class="text-xs">{{ event.duration }}m</p>
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between space-x-4">
+                            <label class="inline-flex cursor-pointer items-center">
+                                <input type="checkbox" value="" class="peer sr-only" />
+                                <div
+                                    class="peer relative h-5 w-[34px] rounded-full after:absolute after:start-[2px] after:top-[2px] after:h-[14px] after:w-[14px] after:rounded-full after:border after:border-slate-100 after:bg-slate-100 after:transition-all after:content-[''] peer-checked:bg-slate-300 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-300 rtl:peer-checked:after:-translate-x-full border-gray-600 bg-slate-700"
+                                ></div>
+                            </label>
+
+                            <div class="flex items-center justify-center rounded-md border border-slate-700">
+                                <span class="border-r border-slate-700 p-1">
+                                    <img src="/static/images/preview-link.svg" alt="clock image" />
+                                </span>
+
+                                <span class="border-r border-slate-700 p-1">
+                                    <img src="/static/images/link.svg/" alt="clock image" />
+                                </span>
+
+                                <span class="p-1">
+                                    <img src="/static/images/dots.svg" alt="dots image" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="mx-auto mt-6 flex justify-center space-x-2">
+            {% if page > 1 %}
+            <a
+                href="?page={{ page - 1 }}&per_page={{ per_page }}"
+                class="rounded-md px-3 py-2 text-sm hover:bg-slate-600 bg-gray-100 text-gray-900"
+            >
+                Prev
+            </a>
+            {% endif %}
+
+            <!-- Page Numbers -->
+            {% for p in page_range %}
+            <a
+                href="?page={{ p }}&per_page={{ per_page }}"
+                class="{% if p == page %} {% else %}bg-gray-300 {% endif %} rounded-lg px-3 py-2 hover:bg-slate-600 bg-gray-100 text-gray-900"
+            >
+                {{ p }}
+            </a>
+            {% endfor %} {% if page < total_pages %}
+            <a
+                href="?page={{ page + 1 }}&per_page={{ per_page }}"
+                class="rounded-md px-3 py-2 text-sm hover:bg-slate-600 bg-gray-100 text-gray-900"
+            >
+                Next
+            </a>
+            {% endif %}
+        </div>
+
+        {% if not events %}
+        <div
+            class="mx-auto mt-2 flex min-h-96 items-center justify-center rounded-lg border-2 border-dotted border-gray-400"
+        >
+            <div class="space-y-4 text-center">
+                <span class="inline-flex items-center justify-center rounded-full bg-gray-300 p-2">
+                    <img src="/static/images/link.svg" class="h-12 w-14 -rotate-45 transform" alt="Link icon" />
+                </span>
+                <div class="text-xl font-bold text-gray-100">Create your first event type</div>
+                <div class="text-sm">
+                    <p>Event types enable you to share links that show available times</p>
+                    <p>on your calendar and allow people to make bookings with you.</p>
+                </div>
+
+                <a
+                    href="/event/create"
+                    class="mx-auto flex h-10 w-20 items-center justify-center rounded-lg bg-gray-100 text-gray-900"
+                >
+                    Create
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+</div>
+
+{% endblock %}
