@@ -74,6 +74,7 @@ async def events(request: Request, page: int = Query(1, ge=1), session: Session 
             "total_pages": total_pages,
             "total_items": total_items,
             "page_range": page_range,
+            "user": current_user,
         },
     )
 

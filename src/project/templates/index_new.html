@@ -1,8 +1,9 @@
-<!-- prettier-ignore -->
 {% extends "base.html" %} {% block content %}
 
 <div class="flex min-h-screen">
-    {% include "components/index_sidebar.html" %}
+    <!-- prettier-ignore -->
+    {% import "components/index_sidebar.html" as sidebar %} 
+    {{ sidebar.render(user) }}
 
     <main class="w-full bg-zinc-950 p-8 text-white">
         <create-event @closecreateevent="createEventOpened=false" v-if="createEventOpened"></create-event>
