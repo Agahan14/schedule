@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block content %}
 <div class="flex min-h-screen">
-    {% include "/components/index_sidebar.html" %}
+    {% import "components/index_sidebar.html" as sidebar %}
+    {{ sidebar.render(user) }}
 
     <!-- Main Content -->
     <main class="flex-1 bg-[#1A1A1A] p-8">
