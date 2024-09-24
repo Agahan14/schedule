@@ -44,7 +44,7 @@ async def create(
     return RedirectResponse(url="/event", status_code=303)
 
 
-@router.get("/", tags=["event"])
+@router.get("/events", tags=["event"])
 async def events(request: Request, page: int = Query(1, ge=1), session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
 
