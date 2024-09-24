@@ -1,12 +1,15 @@
 from __future__ import annotations
-from collections.abc import Sequence
 
-from sqlalchemy import Boolean, Integer, String, select, Text
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column
+from collections.abc import Sequence
+from sqlalchemy import Boolean, Integer, String, Text, select
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, relationship
+
 from ..database import Base
+from ..models import Event
 from ..utils.enums import OauthProvider
+from ..models import Event
 
 
 class User(MappedAsDataclass, Base, unsafe_hash=True):
@@ -16,9 +19,7 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     oauth_provider: Mapped[OauthProvider] = mapped_column(SQLEnum(OauthProvider))
     email: str = mapped_column(String(255), unique=True, nullable=True)
     password: str = mapped_column(String(255), nullable=True, default=None)
-    username: Mapped[str] = mapped_column(
-        String, nullable=True, unique=True, default=None
-    )
+    username: Mapped[str] = mapped_column(String, nullable=True, unique=True, default=None)
     picture_url: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     first_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
@@ -38,6 +39,10 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
         return session.scalar(select(User).where(User.id == int(id)))
 
     @staticmethod
+    def get_by_username(session: Session, username: str) -> User | None:
+        return session.scalar(select(User).where(User.username == username))
+
+    @staticmethod
     def get_by_email(session: Session, email: str) -> User | None:
         return session.scalar(select(User).where(User.email == email))
 
@@ -53,7 +58,6 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
             session.rollback()
             print(f"An error occurred: {str(e)}")  # You can replace this with proper logging
             return None
-
 
     @property
     def full_name(self) -> str:

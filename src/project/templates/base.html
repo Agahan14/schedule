@@ -8,14 +8,17 @@
         <!-- Vue -->
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="/static/vue/base.js" defer></script>
+        <script src="/static/vue/booking.js" defer></script>
         <script src="/static/vue/main.js" defer></script>
         <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         <link rel="stylesheet" href="/static/css/main.css" />
     </head>
     <!-- prettier-ignore -->
     {#{% import "components/test.html" as test %}#}
-{#{{ test.render() }}#}
-
+    {#{{ test.render() }}#}
+    {% import "components/create_event.html" as create_event %}
+    {{ create_event.render() }}
+    
     <body class="" id="app">
         {% block content %} {% endblock %}
     </body>
