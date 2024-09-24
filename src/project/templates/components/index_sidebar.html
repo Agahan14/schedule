@@ -3,7 +3,7 @@
 <aside class="flex sticky top-0 left-0 h-screen w-1/6 flex-col bg-zinc-900 p-4 text-white">
     <h2 class="my-2 text-xl font-bold">Sidebar</h2>
 
-    <div class="flex h-10 items-center rounded bg-zinc-900 hover:bg-zinc-500">
+    <div class="flex h-10 items-center rounded bg-[#1F1F1F] hover:bg-zinc-500">
         <div class="m-2">
             {% if user.picture_url %}
             <img src="{{ user.picture_url }}" alt="Profile Image" class="h-8 w-8 rounded-full" />
@@ -60,7 +60,7 @@
             >
         </li>
         <li>
-            <a href="#" class="flex rounded bg-zinc-700 p-1 text-sm hover:bg-zinc-500"
+            <a href="/availability" class="flex rounded bg-zinc-700 p-1 text-sm hover:bg-zinc-500"
                 ><span class="mx-2"
                     ><svg
                         xmlns="http://www.w3.org/2000/svg"

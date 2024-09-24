@@ -26,7 +26,6 @@ class User(MappedAsDataclass, Base, unsafe_hash=True):
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     about: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
 
-    events: Mapped[list[Event]] = relationship("Event", back_populates="user", init=False)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"

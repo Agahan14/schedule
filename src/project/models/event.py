@@ -22,6 +22,7 @@ from sqlalchemy.orm import (
     Session,
     mapped_column,
     relationship,
+    backref
 )
 from ..database import Base
 from ..utils.enums import BookingStatus, TimeType
@@ -31,9 +32,16 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "event"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, init=False)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
-    user: Mapped["User"] = relationship("User", back_populates="events", init=False)
-    bookings: Mapped[list[Booking]] = relationship("Booking", back_populates="event", cascade="all, delete-orphan")
+    user_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("user.id", ondelete="CASCADE"),
+        nullable=False,
+        init=False,
+    )
+    user: Mapped["User"] = relationship("User", backref=backref("events", passive_deletes=True,)) #type: ignore # noqa
+    bookings: Mapped[list["Booking"]] = relationship(
+        "Booking", back_populates="event", cascade="all, delete-orphan",
+    )
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
     location_url: Mapped[str | None] = mapped_column(String, nullable=True)
