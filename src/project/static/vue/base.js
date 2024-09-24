@@ -1,10 +1,5 @@
 const { defineComponent, createApp } = Vue;
 
-const TestComponent = defineComponent({
-  template: "#test-template",
-  methods: {
-    closeTest() {
-      this.$emit("close-test");
-    },
-  },
+const CreateEvent = defineComponent({
+    template: "#create-event-template",
 });
