@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 <div class="flex">
-    {% import "layouts/index_sidebar.html" as sidebar %} {{ sidebar.render(user) }}
+    {% import "components/index_sidebar.html" as sidebar %} {{ sidebar.render(user) }}
     <div class="bg-gray-800"></div>
     <div class="flex-1 bg-gray-900 p-8 text-white">
         <h1 class="mb-4 text-2xl font-bold">Bookings</h1>

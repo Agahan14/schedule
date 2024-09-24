@@ -1,16 +1,16 @@
 from __future__ import annotations
-from typing import List
+
 from sqlalchemy import (
+    JSON,
     Boolean,
     ForeignKey,
     Integer,
-    String, JSON, select,
+    String,
+    select,
 )
-
-from sqlalchemy.orm import Mapped, MappedAsDataclass, mapped_column, relationship, backref, Session
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, backref, mapped_column, relationship
 
 from ..database import Base
-
 
 # class WorkSchedule(MappedAsDataclass, Base):
 #     __tablename__ = "work_schedule"
@@ -22,6 +22,7 @@ from ..database import Base
 #     work_schedule: Mapped[dict] = mapped_column(JSON, nullable=True)
 #     availability = relationship("Availability", backref=backref("work_schedules", passive_deletes=True))
 #
+
 
 class Availability(MappedAsDataclass, Base, unsafe_hash=True):
     __tablename__ = "availability"
@@ -38,7 +39,7 @@ class Availability(MappedAsDataclass, Base, unsafe_hash=True):
         nullable=False,
         init=False,
     )
-    user: Mapped["User"] = relationship( #type: ignore
+    user: Mapped["User"] = relationship(  # type: ignore # noqa
         "User", backref=backref("availabilities", cascade="all, delete-orphan")
     )
     work_schedule: Mapped[dict] = mapped_column(JSON, nullable=True)
@@ -47,14 +48,12 @@ class Availability(MappedAsDataclass, Base, unsafe_hash=True):
     @staticmethod
     def get_by_id(session: Session, id: int) -> Availability | None:
         return session.scalar(select(Availability).where(Availability.id == int(id)))
+
     @staticmethod
     def get_user_availability(session: Session, aval_id: int, user_id: int) -> Availability | None:
-        return session.scalar(select(Availability).where(Availability.id == int(aval_id),
-                                                         Availability.user_id == user_id))
-
-
-
-
+        return session.scalar(
+            select(Availability).where(Availability.id == int(aval_id), Availability.user_id == user_id)
+        )
 
 
 # class EventLimit(MappedAsDataclass, unsafe_hash=True):
@@ -98,5 +97,3 @@ class Availability(MappedAsDataclass, Base, unsafe_hash=True):
 #             name="check_interval",
 #         ),
 #     )
-
-

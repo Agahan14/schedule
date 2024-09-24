@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from .database import lifespan
-from .routers import auth, booking, event, availability
+from .routers import auth, availability, booking, event
 
 
 def create_app() -> FastAPI:
@@ -26,7 +26,8 @@ def create_app() -> FastAPI:
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
     app.add_middleware(
-        SessionMiddleware, secret_key="0c94f0f7-a1b3-41c9-9d6a-56a7fd156fcc",
+        SessionMiddleware,
+        secret_key="0c94f0f7-a1b3-41c9-9d6a-56a7fd156fcc",
     )
     # if debug:
     #     app.add_middleware(

@@ -3,29 +3,11 @@ from __future__ import annotations
 import datetime
 from collections.abc import Sequence
 
-from sqlalchemy import (
-    Boolean,
-    DateTime,
-    Enum,
-    ForeignKey,
-    Integer,
-    String,
-    desc,
-    func,
-    select,
-    sql
-)
-from src.project.utils.enums import BookingStatus, TimeType
-from sqlalchemy.orm import (
-    Mapped,
-    MappedAsDataclass,
-    Session,
-    mapped_column,
-    relationship,
-    backref
-)
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, desc, func, select, sql
+from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, backref, mapped_column, relationship
+
 from ..database import Base
-from ..utils.enums import BookingStatus, TimeType
+from ..utils.enums import BookingStatus
 
 
 class Event(MappedAsDataclass, Base, unsafe_hash=True):
@@ -38,9 +20,17 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         nullable=False,
         init=False,
     )
-    user: Mapped["User"] = relationship("User", backref=backref("events", passive_deletes=True,)) #type: ignore # noqa
-    bookings: Mapped[list["Booking"]] = relationship(
-        "Booking", back_populates="event", cascade="all, delete-orphan",
+    user: Mapped["User"] = relationship(  # type: ignore # noqa
+        "User",
+        backref=backref(
+            "events",
+            passive_deletes=True,
+        ),
+    )
+    bookings: Mapped[list[Booking]] = relationship(
+        "Booking",
+        back_populates="event",
+        cascade="all, delete-orphan",
     )
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
@@ -61,8 +51,9 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
 
     @staticmethod
     def get_all_by_user_id(session: Session, user_id: int, offset: int, limit: int) -> Sequence[Event] | None:
-        return session.scalars((select(Event).where(Event.user_id == user_id)).offset(offset).limit(limit).order_by(desc(Event.id))).all()
-
+        return session.scalars(
+            (select(Event).where(Event.user_id == user_id)).offset(offset).limit(limit).order_by(desc(Event.id))
+        ).all()
 
     @staticmethod
     def count_events_by_user_id(session: Session, user_id: int) -> int:

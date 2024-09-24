@@ -180,7 +180,7 @@ async def get_index(request: Request, session: Session = Depends(get_db_session)
     current_user = get_current_user(request, session)
     if not current_user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=NOT_ENOUGH_PERMISSION)
-    return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
+    return templates.TemplateResponse("index_new.html", {"request": request, "user": current_user})
 
 
 # Returns the update page and updates the user detail

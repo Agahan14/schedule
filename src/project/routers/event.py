@@ -1,19 +1,12 @@
-import os
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query, Request, Form, HTTPException
-from pydantic import BaseModel
+
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request
+from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import HTMLResponse, RedirectResponse
-from sqlalchemy.orm import Session
-from starlette.templating import Jinja2Templates
-from ..dependencies import get_db_session, get_current_user, templates
+
+from ..dependencies import get_current_user, get_db_session, templates
 from ..models import Event
-
-
-# current_dir = os.path.dirname(os.path.realpath(__file__))
-# template_dir = os.path.join(current_dir, "..", "templates")
-
-# templates = Jinja2Templates(directory=template_dir)
 
 router = APIRouter(prefix="/event")
 

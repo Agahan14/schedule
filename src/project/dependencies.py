@@ -48,13 +48,9 @@ def get_current_user(request: Request, session: Session) -> User | None:
         user = timed_serializer.loads(session_cookie, max_age=SESSION_MAX_AGE)
         db_user = User.get_by_email(session=session, email=user["email"])
         if not db_user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session"
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
     except BadSignature:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid session")
 
     return db_user
 
@@ -83,9 +79,7 @@ def get_user_from_session(cookie_value: str, db: Session):
         user = db.scalars(stmt).one_or_none()
 
         if not user:
-            raise HTTPException(
-                status_code=401, detail="Invalid session or user does not exist"
-            )
+            raise HTTPException(status_code=401, detail="Invalid session or user does not exist")
 
         return user
     except (BadSignature, SignatureExpired):
