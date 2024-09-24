@@ -1,0 +1,49 @@
+{% macro book_header(status) %} {% set statuses = { "confirmed": { "text": "This meeting is scheduled", "color":
+"bg-green-600", "svg": '<svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg
+>' }, "unconfirmed": { "text": "This meeting is unconfirmed", "color": "bg-orange-600", "svg": '<svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v10m0 4v2" /></svg
+>' }, "past": { "text": "This meeting has passed", "color": "bg-blue-600", "svg": '<svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 4" /></svg
+>' }, "canceled": { "text": "This meeting is canceled", "color": "bg-red-600", "svg": '<svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg
+>' } } %} {% set status_info = statuses[status] if status in statuses else { "text": "Unknown status", "color":
+"bg-gray-600", "svg": '<svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v20m10-10H2" /></svg
+>' } %}
+
+<div class="mb-4 flex justify-center">
+    <div class="{{ status_info.color }} rounded-full p-2">{{ status_info.svg | safe }}</div>
+</div>
+<h2 class="mb-2 text-center text-2xl font-bold">{{ status_info.text }}</h2>
+{% endmacro %}
