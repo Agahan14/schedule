@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-
 from sqlalchemy import Boolean, Integer, String, Text, select
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.exc import SQLAlchemyError
@@ -10,6 +9,7 @@ from sqlalchemy.orm import Mapped, MappedAsDataclass, Session, mapped_column, re
 from ..database import Base
 from ..models import Event
 from ..utils.enums import OauthProvider
+from ..models import Event
 
 
 class User(MappedAsDataclass, Base, unsafe_hash=True):

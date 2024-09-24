@@ -13,8 +13,9 @@ from sqlalchemy import (
     desc,
     func,
     select,
-    sql,
+    sql
 )
+from src.project.utils.enums import BookingStatus, TimeType
 from sqlalchemy.orm import (
     Mapped,
     MappedAsDataclass,
@@ -22,7 +23,6 @@ from sqlalchemy.orm import (
     mapped_column,
     relationship,
 )
-
 from ..database import Base
 from ..utils.enums import BookingStatus, TimeType
 
@@ -33,15 +33,14 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, init=False)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     user: Mapped["User"] = relationship("User", back_populates="events", init=False)
-
     bookings: Mapped[list[Booking]] = relationship("Booking", back_populates="event", cascade="all, delete-orphan")
     title: Mapped[str] = mapped_column(String, nullable=False)
     url: Mapped[str] = mapped_column(String, nullable=False)
-    location_url: Mapped[str] = mapped_column(String, nullable=False)
+    location_url: Mapped[str | None] = mapped_column(String, nullable=True)
     date: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False, init=False)
+    bookings: Mapped[list[Booking]] = relationship("Booking", back_populates="event", init=False)
     is_hidden: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql.false(), init=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
-    time_type: Mapped[TimeType] = mapped_column(Enum(TimeType), nullable=True, init=False, default=TimeType.MINUTES)
     description: Mapped[str] = mapped_column(String, nullable=True, default=None)
 
     @staticmethod
@@ -53,8 +52,13 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         return (session.scalars(select(Event))).all()
 
     @staticmethod
-    def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Event] | None:
-        return session.scalars((select(Event).where(Event.user_id == user_id)).order_by(Event.date)).all()
+    def get_all_by_user_id(session: Session, user_id: int, offset: int, limit: int) -> Sequence[Event] | None:
+        return session.scalars((select(Event).where(Event.user_id == user_id)).offset(offset).limit(limit).order_by(desc(Event.id))).all()
+
+
+    @staticmethod
+    def count_events_by_user_id(session: Session, user_id: int) -> int:
+        return session.execute(select(func.count(Event.id)).where(Event.user_id == user_id)).scalar()
 
 
 class Booking(MappedAsDataclass, Base, unsafe_hash=True):
