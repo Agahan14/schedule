@@ -26,7 +26,6 @@ async def get_availability(request: Request, session: Session = Depends(get_db_s
 @router.post("/create_availability", tags=["availability"], response_class=HTMLResponse)
 async def create_availability(request: Request, session: Session = Depends(get_db_session)) -> RedirectResponse:
     current_user = get_current_user(request, session)
-    print(current_user)
     body = await request.json()
     name = body.get('name')
     work_schedule = default_work_schedule
@@ -38,8 +37,6 @@ async def create_availability(request: Request, session: Session = Depends(get_d
     availability_id = new_availability.id
 
     return RedirectResponse(url=f"/availability/{availability_id}", status_code=303)
-
-
 
 
 
