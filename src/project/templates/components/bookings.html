@@ -1,5 +1,4 @@
 <div class="space-y-4">
-    
     {% for booking in bookings %}
     <a href="/booking/info/{{ booking.id }}">
         <div
@@ -30,25 +29,30 @@
                             />
                             <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
                         </svg>
-                        Join Google Meet</a
-                    >
+                        Join Google Meet
+                    </a>
                 </div>
             </div>
 
             <div class="flex-grow md:mx-8">
                 {% if booking.status.value == "canceled" %}
                 <p class="line-through">
-                    {{booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
+                    {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
                     booking.created_by }}
                 </p>
-                {% else %} {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
-                booking.created_by }} {% endif %}
+                {% else %}
+                <p>
+                    {{ booking.event.duration }} {{ booking.event.time_type.value }} between you and {{
+                    booking.created_by }}
+                </p>
+                {% endif %}
                 <div class="mt-2 text-gray-400">"{{ booking.event.description }}"</div>
             </div>
-            {% if booking.status.value == "confirmed" %}
+
             <div class="flex items-start">
+                {% if booking.status.value == "confirmed" %}
                 <button
-                    @click="cancelBooking({{ booking.id }})"
+                    @click.prevent="openCancel({{ booking.id }})"
                     class="mr-2 flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
                 >
                     <svg
@@ -82,9 +86,7 @@
                     </svg>
                     Edit
                 </button>
-            </div>
-            {% elif booking.status.value =="unconfirmed"%}
-            <div class="flex items-start">
+                {% elif booking.status.value == "unconfirmed" %}
                 <button
                     class="mr-2 flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-gray-600"
                 >
@@ -117,9 +119,7 @@
                     </svg>
                     Edit
                 </button>
-            </div>
-            {% else %}
-            <div class="flex items-start">
+                {% else %}
                 <button
                     class="mr-2 flex items-center rounded-md bg-gray-700 px-4 py-2 text-white transition duration-300 hover:bg-red-800"
                 >
@@ -137,8 +137,8 @@
                     </svg>
                     Delete
                 </button>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </a>
     {% endfor %}

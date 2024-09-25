@@ -1,10 +1,15 @@
-createApp({
+const app = Vue.createApp({
     components: {
         CreateEvent,
+        BookingList,
+        InteractiveCalendar,
     },
     data() {
         return {
             createEventOpened: false,
+            bookings: [],
         };
     },
-}).mount("#app");
+});
+
+app.mount("#app");

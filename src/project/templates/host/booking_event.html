@@ -10,50 +10,41 @@
         <div class="flex h-[400px] w-[1000px] overflow-hidden rounded-lg bg-gray-800 shadow-lg">
             <div class="flex w-48 flex-col bg-gray-700 p-4">
                 <h3 class="mb-2 text-lg font-bold">
-                    {% if user_pic %}
-                    <img src="user_pic" alt="Profile Image" class="h-8 w-8 rounded-full" />
-                    {% else %}
                     <img
                         src="/static/images/profile_pictures/profile_picture.jpg"
                         alt="Default Image"
                         class="h-8 w-8 rounded-full"
                     />
-                    {% endif %}{{ username }}
+                    {{username}}
                 </h3>
-                <p class="text-l mb-1 text-gray-300">{{ event.title }}</p>
-                <p class="text-l mb-2 text-gray-300">🕒 {{ event.duration }} {{ event.time_type.value }}</p>
-                <p class="text-l mb-3 flex items-center text-gray-300">
-                    <a class="flex items-center" target="_blank">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 120 75"
-                            width="20px"
-                            class="mr-1"
-                        >
-                            <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z" />
-                            <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z" />
-                            <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z" />
-                            <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z" />
-                            <path
-                                fill="#00ac47"
-                                d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"
-                            />
-                            <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
-                        </svg>
-                        Google meet</a
-                    >
-                </p>
+                <p class="text-l mb-4 text-xl text-gray-300">{{ event.title }}</p>
+                <p class="text-l mb-3 flex items-center text-sm text-gray-300"></p>
+                <p class="text-l mb-2 text-sm text-gray-300">🕒 {{ event.duration }} {{ event.time_type.value }}</p>
+                <a href="{{ event.url }}" class="items-left flex text-sm text-blue-500 hover:underline" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 120 75" width="18px" class="mr-1">
+                        <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z" />
+                        <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z" />
+                        <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z" />
+                        <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z" />
+                        <path
+                            fill="#00ac47"
+                            d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"
+                        />
+                        <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
+                    </svg>
+                    Google meet</a
+                >
+
                 <div id="selectedDates" class="text-l mt-auto text-gray-300"></div>
                 <div id="selectedTime" class="text-l mt-1 text-gray-300"></div>
             </div>
             <div class="flex-grow p-4">
                 <div class="mb-2 flex items-center justify-between">
                     <button id="prevMonth" class="text-gray-400 hover:text-white">&lt;</button>
-                    <div id="monthYear" class="text-sm font-bold"></div>
+                    <div id="monthYear" class="text-l font-bold"></div>
                     <button id="nextMonth" class="text-gray-400 hover:text-white">&gt;</button>
                 </div>
-                <div class="text-l mb-1 grid grid-cols-7 gap-1 text-center font-semibold text-gray-400">
+                <div class="text-l mb-1 grid grid-cols-7 gap-1 pb-2 text-center font-semibold text-gray-400">
                     <div>SUN</div>
                     <div>MON</div>
                     <div>TUE</div>
@@ -70,11 +61,11 @@
             </div>
             <div id="timeSlots" class="w-48 overflow-y-auto bg-gray-700 p-4 text-center text-xs"></div>
         </div>
-
+        <!-- created with God's help-->
         <script>
             let currentDate = new Date();
             let is24HourFormat = false;
-            let selectedDate = null; // Изменено на одну переменную
+            let selectedDate = null;
             let selectedTime = null;
 
             function generateCalendar(year, month) {
@@ -94,9 +85,9 @@
                     const dayElement = document.createElement("div");
                     dayElement.textContent = day;
                     const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                    dayElement.className = "p-1 text-xs hover:bg-gray-700 cursor-pointer";
+                    dayElement.className =
+                        "p-2 text-l border border-gray-800 transition rounded-lg duration-150 hover:bg-gray-400 cursor-pointer";
                     if (selectedDate === dateString) {
-                        // Изменено на проверку одной даты
                         dayElement.classList.add("bg-blue-500", "text-white", "rounded");
                     }
                     if (
@@ -106,7 +97,7 @@
                     ) {
                         dayElement.classList.add("ring-2", "ring-white", "rounded");
                     }
-                    dayElement.addEventListener("click", () => selectDate(dateString)); // Изменено на selectDate
+                    dayElement.addEventListener("click", () => selectDate(dateString));
                     daysContainer.appendChild(dayElement);
                 }
                 updateSelectedInfo();
@@ -135,7 +126,6 @@
             }
 
             function selectDate(dateString) {
-                // Установка выбранной даты
                 selectedDate = dateString;
                 generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
             }

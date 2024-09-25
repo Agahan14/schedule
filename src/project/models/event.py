@@ -53,6 +53,12 @@ class Event(MappedAsDataclass, Base, unsafe_hash=True):
         return (session.scalars(select(Event))).all()
 
     @staticmethod
+    def get_all_by_username(session: Session, username: str) -> Sequence[Event] | None:
+        return session.scalars(
+            (select(Event).where(Event.user.username == username)).order_by(desc(Event.id))
+        ).all()
+
+    @staticmethod
     def get_all_by_user_id(session: Session, user_id: int) -> Sequence[Event] | None:
         return session.scalars((select(Event).where(Event.user_id == user_id)).order_by(Event.date)).all()
 

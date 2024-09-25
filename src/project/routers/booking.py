@@ -13,7 +13,7 @@ router = APIRouter(prefix="/booking")
 
 @router.get("/")
 async def index(request: Request, session: Session = Depends(get_db_session)):
-    return RedirectResponse(url="booking/upcoming", status_code=301)
+    return RedirectResponse(url="upcoming", status_code=301)
 
 
 @router.get("/info/{id}", tags=["booking"])
@@ -22,14 +22,15 @@ async def book_information(id: int, request: Request, session: Session = Depends
     # if not current_user:
     #     raise HTTPException(status_code=401, detail="Unauthorized")
     booking = Booking.get_by_id(session, id=id)
-    formated_date = booking.date.strftime("%A, %B %d, %Y")  # type: ignore
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
+    formated_date = booking.date.strftime("%A, %B %d, %Y")  # type: ignore
+
     return templates.TemplateResponse(
         "booking/book_information.html",
         {
             "request": request,
-            "user": current_user,
+            "username": current_user,  # temporary fix
             "booking": booking,
             "timedelta": timedelta,
             "formated_date": formated_date,
@@ -105,7 +106,7 @@ async def past(request: Request, session: Session = Depends(get_db_session)):
     )
 
 
-@router.post(f"/booking/cancel/{id}", tags=["booking"])
+@router.post("/booking/cancel/{booking_id}", tags=["booking"])
 async def cancel(booking_id: int, request: Request, session: Session = Depends(get_db_session)):
     current_user = get_current_user(request=request, session=session)
     # if not current_user:
