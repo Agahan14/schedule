@@ -56,6 +56,7 @@ class Availability(MappedAsDataclass, Base, unsafe_hash=True):
         )
 
 
+
 # class EventLimit(MappedAsDataclass, unsafe_hash=True):
 #     __tablename__ = "event_limit"
 #

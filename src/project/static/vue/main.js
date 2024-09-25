@@ -1,7 +1,7 @@
 createApp({
     components: {
         CreateEvent,
-        CreateAvailability,
+        CreateAvailability
     },
     data() {
         return {
@@ -12,11 +12,9 @@ createApp({
     methods: {
         createAvailability() {
             this.createAvailabilityOpened = true;
-            console.log("Here");
-            console.log(this.createAvailabilityOpened);
         },
         closeAvailability() {
             this.createAvailabilityOpened = false;
         },
-    },
+    }
 }).mount("#app");

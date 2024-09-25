@@ -4,10 +4,11 @@ from fastapi import (
     Request,
 )
 from sqlalchemy.orm import Session
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 
 from ..dependencies import current_dir, get_current_user, get_db_session, template_dir, templates
 from ..models import Availability
+from ..utils.enums import default_work_schedule
 
 current_dir = current_dir
 template_dir = template_dir
@@ -22,9 +23,24 @@ async def get_availability(request: Request, session: Session = Depends(get_db_s
     return templates.TemplateResponse("availability/list_availability.html", {"request": request, "user": current_user})
 
 
-@router.api_route("/create_availability", methods=["GET", "POST"], tags=["availability"], response_class=HTMLResponse)
-async def post_availability():
-    pass
+@router.post("/create_availability", tags=["availability"], response_class=HTMLResponse)
+async def create_availability(request: Request, session: Session = Depends(get_db_session)) -> RedirectResponse:
+    current_user = get_current_user(request, session)
+    print(current_user)
+    body = await request.json()
+    name = body.get('name')
+    work_schedule = default_work_schedule
+
+    new_availability = Availability(name=name, user=current_user, work_schedule=work_schedule, is_default=True)
+
+    session.add(new_availability)
+    session.commit()
+    availability_id = new_availability.id
+
+    return RedirectResponse(url=f"/availability/{availability_id}", status_code=303)
+
+
+
 
 
 @router.api_route("/availability/{id}", methods=["GET", "POST"], tags=["availability"], response_class=HTMLResponse)
