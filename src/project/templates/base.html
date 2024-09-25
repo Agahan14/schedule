@@ -17,6 +17,7 @@
     {#{{ test.render() }}#}
     {% import "components/create_event.html" as create_event %}
     {{ create_event.render() }}
+    {% block imports %}{% endblock %}
 
     <body class="relative" id="app">
         {% block content %} {% endblock %}
