@@ -1,3 +1,5 @@
+import json
+
 from fastapi import (
     APIRouter,
     Depends,
@@ -29,8 +31,7 @@ async def create_availability(request: Request, session: Session = Depends(get_d
     body = await request.json()
     name = body.get('name')
     work_schedule = default_work_schedule
-
-    new_availability = Availability(name=name, user=current_user, work_schedule=work_schedule, is_default=True)
+    new_availability = Availability(name=name, user=current_user, work_schedule=work_schedule, is_default=False)
 
     session.add(new_availability)
     session.commit()
@@ -45,10 +46,22 @@ async def availability_detail(id: int, request: Request, session: Session = Depe
     if request.method == "GET":
         current_user = get_current_user(request, session)
         availability = Availability.get_user_availability(session, aval_id=id, user_id=current_user.id)
+        print(availability.id)
+        availability_data = {
+            "name": availability.name,
+            "is_default": availability.is_default,
+            "work_schedule": [
+                {
+                    "day_of_week": ws.get("day_of_week"),
+                    "time_from": ws.get("time_from"),
+                    "time_to": ws.get("time_to"),
+                    "is_active": ws.get("is_active")
+                } for ws in availability.work_schedule
+            ]
+        }
         return templates.TemplateResponse(
             "availability/availability_detail.html",
-            {"request": request, "user": current_user, "availability": availability},
-        )
+            {"request": request, "user": current_user, "availability": availability_data})
     elif request.method == "POST":
         current_user = get_current_user(request, session)
         work_schedule = await request.json()
