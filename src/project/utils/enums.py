@@ -29,12 +29,16 @@ class OauthProvider(Enum):
     ORDINARY_USER = "ORDINARY_USER"
 
 
-default_work_schedule = [
-    {"day_of_week": "Monday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Tuesday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Wednesday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Thursday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Friday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Saturday", "time_from": "09:00", "time_to": "17:00"},
-    {"day_of_week": "Sunday", "time_from": "09:00", "time_to": "17:00"}
-]
+default_work_schedule = {
+    "name": "Default Availability",
+    "is_default": False,
+    "work_schedule": [
+        {"day_of_week": "Monday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Tuesday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Wednesday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Thursday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Friday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Saturday", "time_from": "09:00", "time_to": "17:00"},
+        {"day_of_week": "Sunday", "time_from": "09:00", "time_to": "17:00"}
+    ],
+}

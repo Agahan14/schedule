@@ -5,9 +5,34 @@
 
         <!-- Main Content -->
         <main class="flex h-screen w-full flex-col overflow-y-auto bg-[#1A1A1A] p-8">
+
+            <div><label>
+                <input
+                    type="text"
+                    name="day_of_week"
+                    class="rounded px-2 py-1 text-white border-none bg-[#1A1A1A] focus:outline-none focus:ring-0 focus:border-transparent"
+                    value="{{ availability.name }}"
+                />
+            </label></div>
+
             <div class="flex w-3/4 flex-col rounded-md border border-[#383838]">
                 <div class="absolute top-0 right-0 m-4 flex space-x-4 items-center">
-                    <!-- First button (Save) -->
+
+
+                    <span class="text-[#E1E1E1]">Set to default</span>
+                    <label class="inline-flex cursor-pointer items-center">
+                        <input
+                            type="checkbox"
+                            name="active"
+                            class="peer sr-only"
+                        />
+                        <div
+                            class="peer relative h-6 w-11 rounded-full bg-[#404040] after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-[#1A1A1A] after:bg-[#1A1A1A] after:transition-all after:content-[''] peer-checked:bg-[#E1E1E1] peer-checked:after:translate-x-full peer-checked:after:border-[#1A1A1A] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#E1E1E1] dark:border-[#E1E1E1] dark:bg-gray-700 dark:peer-focus:ring-[#E1E1E1] rtl:peer-checked:after:-translate-x-full"
+                        ></div>
+                    </label>
+
+
+                    <div class="border-r border-[#575757] h-6"></div>
                     <button
                         class="bg-[#1A1A1A] border border-[#E1E1E1] hover:bg-[#772522] text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
                     >
