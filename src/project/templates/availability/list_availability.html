@@ -5,7 +5,7 @@
     {% import "components/index_sidebar.html" as sidebar %} {{ sidebar.render(user) }}
 
     <!-- Main Content -->
-    <main class="min-h-screen w-full p-6 bg-[#1A1A1A]" id="app">
+    <main class="min-h-screen w-full bg-[#1A1A1A] p-6" id="app">
         <create-availability
             @closecreateavailability="closeAvailability"
             v-if="createAvailabilityOpened"
@@ -27,12 +27,12 @@
 
         {% for availability in user.availabilities %}
         <div
-            class="flex h-40 flex-col gap-2 border border-[#383838] bg-[#1A1A1A] hover:bg-zinc-500 {% if loop.first %} rounded-t-lg {% endif %} {% if loop.last %} rounded-b-lg {% endif %}"
+            class="{% if loop.first %} {% endif %} {% if loop.last %} {% endif %} flex h-40 flex-col gap-2 rounded-b-lg rounded-t-lg border border-[#383838] bg-[#1A1A1A] hover:bg-zinc-500"
         >
-            <h2 class="mt-4 text-lg font-bold text-white pl-4">
+            <h2 class="mt-4 pl-4 text-lg font-bold text-white">
                 <a href="/availability/{{ availability.id }}">{{ availability.name }}</a>
             </h2>
-            <h4 class="text-xs text-white pl-4">Monday 22:00</h4>
+            <h4 class="pl-4 text-xs text-white">Monday 22:00</h4>
         </div>
         {% endfor %}
     </main>

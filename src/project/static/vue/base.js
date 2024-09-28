@@ -14,7 +14,6 @@ const CreateAvailability = defineComponent({
 
     methods: {
         async submitAvailability() {
-            console.log("Hello World")
             try {
                 const response = await fetch("/create_availability", {
                     method: "POST",

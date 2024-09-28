@@ -46,8 +46,8 @@ async def availability_detail(id: int, request: Request, session: Session = Depe
     if request.method == "GET":
         current_user = get_current_user(request, session)
         availability = Availability.get_user_availability(session, aval_id=id, user_id=current_user.id)
-        print(availability.id)
         availability_data = {
+            "id": availability.id,
             "name": availability.name,
             "is_default": availability.is_default,
             "work_schedule": [
@@ -62,13 +62,17 @@ async def availability_detail(id: int, request: Request, session: Session = Depe
         return templates.TemplateResponse(
             "availability/availability_detail.html",
             {"request": request, "user": current_user, "availability": availability_data})
+
     elif request.method == "POST":
         current_user = get_current_user(request, session)
-        work_schedule = await request.json()
+        availability_json = await request.json()
         availability = Availability.get_user_availability(session, aval_id=id, user_id=current_user.id)
-        availability.work_schedule = work_schedule
+        availability.name = availability_json["name"]
+        availability.work_schedule = availability_json["work_schedule"]
+        availability.is_default = availability_json["is_default"]
         session.commit()
-        return templates.TemplateResponse(
-            "availability/availability_detail.html",
-            {"request": request, "user": current_user, "availability": availability},
-        )
+        return JSONResponse(content={"message": "Availability updated successfully"}, status_code=200)
+
+
+
+

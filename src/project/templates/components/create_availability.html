@@ -1,34 +1,33 @@
 {% macro render(user) %}
-    <template id="create-availability-template">
-        <div class="fixed inset-0 bg-gray-100 bg-opacity-10 z-50">
-            <div
-                class="fixed top-1/2 right-1/2 bg-[#1A1A1A] translate-x-1/2 -translate-y-1/2 p-5 rounded-xl w-[600px] h-[200px] max-w-full">
+<template id="create-availability-template">
+    <div class="fixed inset-0 z-50 bg-gray-100 bg-opacity-10">
+        <div
+            class="fixed right-1/2 top-1/2 h-[200px] w-[600px] max-w-full -translate-y-1/2 translate-x-1/2 rounded-xl bg-[#1A1A1A] p-5"
+        >
+            <h1 class="mb-4 text-2xl font-bold text-white">Add a new schedule</h1>
 
-                <h1 class="mb-4 text-2xl font-bold text-white">Add a new schedule</h1>
+            <div>
+                <label class="text-sm font-medium text-white" for="name">Name</label>
+                <input
+                    v-model="name"
+                    class="w-full rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1 text-white"
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                />
+            </div>
 
-                <div>
-
-                    <label class="text-sm font-medium text-white" for="name">Name</label>
-                    <input
-                        v-model="name"
-                        class="w-full text-white rounded-md border border-zinc-600 bg-zinc-950 px-2 py-1"
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                    />
-                </div>
-
-                <div class="flex flex-row justify-end gap-4 my-4">
-
-                    <button @click="$emit('closecreateavailability')" class="text-white">Close</button>
-                    <button @click="submitAvailability"
-                            class="block h-10 rounded bg-[#FAFAFA] px-4 py-2 font-semibold text-black hover:bg-zinc-500">
-                        Continue
-                    </button>
-                </div>
+            <div class="my-4 flex flex-row justify-end gap-4">
+                <button @click="$emit('closecreateavailability')" class="text-white">Close</button>
+                <button
+                    @click="submitAvailability"
+                    class="block h-10 rounded bg-[#FAFAFA] px-4 py-2 font-semibold text-black hover:bg-zinc-500"
+                >
+                    Continue
+                </button>
             </div>
         </div>
-
-    </template>
+    </div>
+</template>
 {% endmacro %}
