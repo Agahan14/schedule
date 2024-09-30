@@ -72,7 +72,6 @@
                             {%
                             endif
                             %}
-                            onchange="toggleTimeFields(this, {{ loop.index }});"
                         />
                         <div
                             class="peer relative h-6 w-11 rounded-full bg-[#404040] after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-[#1A1A1A] after:bg-[#1A1A1A] after:transition-all after:content-[''] peer-checked:bg-[#E1E1E1] peer-checked:after:translate-x-full peer-checked:after:border-[#1A1A1A] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#E1E1E1] dark:border-[#E1E1E1] dark:bg-gray-700 dark:peer-focus:ring-[#E1E1E1] rtl:peer-checked:after:-translate-x-full"
@@ -98,19 +97,19 @@
                                 type="time"
                                 name="time_from"
                                 value="{{ schedule.time_from }}"
-                                class="rounded border-[#E1E1E1] bg-[#1A1A1A] px-2 py-1 text-white"
+                                class="rounded border-[#E1E1E1] bg-[#1A1A1A] px-2 py-1 text-white {% if not schedule.is_active %}hidden{% endif %}"
                                 data-schedule-id="{{ loop.index }}"
                             />
                         </label>
 
-                        <span class="text-white">-</span>
+                        <span class="text-white {% if not schedule.is_active %}hidden{% endif %}">-</span>
 
                         <label class="inline-flex items-center">
                             <input
                                 type="time"
                                 name="time_to"
                                 value="{{ schedule.time_to }}"
-                                class="rounded border-[#E1E1E1] bg-[#1A1A1A] px-2 py-1 text-white"
+                                class="rounded border-[#E1E1E1] bg-[#1A1A1A] px-2 py-1 text-white {% if not schedule.is_active %}hidden{% endif %}"
                                 data-schedule-id="{{ loop.index }}"
                             />
                         </label>

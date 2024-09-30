@@ -78,6 +78,7 @@ createApp({
 
                 const result = await response.json();
                 console.log("Successfully saved data:", result);
+                window.location.href = `/availability/${availabilityId}`;
 
             } catch (error) {
                 console.error("Error saving data:", error);

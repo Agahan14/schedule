@@ -27,7 +27,7 @@
 
         {% for availability in user.availabilities %}
         <div
-            class="{% if loop.first %} {% endif %} {% if loop.last %} {% endif %} flex h-40 flex-col gap-2 rounded-b-lg rounded-t-lg border border-[#383838] bg-[#1A1A1A] hover:bg-zinc-500"
+            class="first:rounded-t-lg last:rounded-b-lg  flex h-40 flex-col gap-2 border border-[#383838] bg-[#1A1A1A] hover:bg-zinc-500"
         >
             <h2 class="mt-4 pl-4 text-lg font-bold text-white">
                 <a href="/availability/{{ availability.id }}">{{ availability.name }}</a>
