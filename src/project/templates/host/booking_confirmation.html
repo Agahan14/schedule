@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Interactive Calendar</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="flex h-screen items-center justify-center bg-gray-900 text-lg text-white">
+        <div class="flex h-[400px] w-full max-w-[700px] overflow-hidden rounded-lg bg-gray-800 shadow-lg">
+            <div class="flex w-80 flex-col bg-gray-700 p-5">
+                <h3 class="items-left flex text-lg font-bold">
+                    <img
+                        src="/static/images/profile_pictures/profile_picture.jpg"
+                        alt="Default Image"
+                        class="mb-2 mr-2 h-8 w-8 rounded-full"
+                    />
+                    {{userFullname}}
+                </h3>
+                <hr class="border-gray-600" />
+                <p class="text-l mb-6 text-gray-300">{{ event.title }}</p>
+                <p class="items-left text-l mb-4 flex text-sm text-gray-300">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 -960 960 960"
+                        width="22px"
+                        fill="#B7B7B7"
+                        class="mr-1"
+                    >
+                        <path
+                            d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z"
+                        />
+                    </svg>
+                    {{ formated_date }}
+                </p>
+                <p class="items-left text-l mb-4 flex text-sm text-gray-300">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 -960 960 960"
+                        width="16px"
+                        fill="#B7B7B7"
+                        class="mr-1"
+                    >
+                        <path
+                            d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"
+                        />
+                    </svg>
+                    {{ event.duration }} {{ event.time_type.value }}
+                </p>
+                <a href="{{ event.url }}" class="items-left flex text-sm text-blue-500 hover:underline" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 120 75" width="18px" class="mr-1">
+                        <path fill="#00832d" d="M49.5 36l8.53 9.75 11.47 7.33 2-17.02-2-16.64-11.69 6.44z" />
+                        <path fill="#0066da" d="M0 51.5V66c0 3.315 2.685 6 6 6h14.5l3-10.96-3-9.54-9.95-3z" />
+                        <path fill="#e94235" d="M20.5 0L0 20.5l10.55 3 9.95-3 2.95-9.41z" />
+                        <path fill="#2684fc" d="M20.5 20.5H0v31h20.5z" />
+                        <path
+                            fill="#00ac47"
+                            d="M82.6 8.68L69.5 19.42v33.66l13.16 10.79c1.97 1.54 4.85.135 4.85-2.37V11c0-2.535-2.945-3.925-4.91-2.32zM49.5 36v15.5h-29V72h43c3.315 0 6-2.685 6-6V53.08z"
+                        />
+                        <path fill="#ffba00" d="M63.5 0h-43v20.5h29V36l20-16.57V6c0-3.315-2.685-6-6-6z" />
+                    </svg>
+                    Google Meet
+                </a>
+            </div>
+            <div class="w-full rounded-lg p-6 text-sm text-white shadow-lg">
+                <form class="space-y-4">
+                    <div>
+                        <label for="name" class="mb-1 block text-sm font-medium">Your name *</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            class="w-full rounded border border-gray-700 bg-gray-800 py-2 focus:border-blue-500 focus:outline-none"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label for="email" class="mb-1 block text-sm font-medium">Email address *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="w-full rounded border border-gray-700 bg-gray-800 py-2 focus:border-blue-500 focus:outline-none"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label for="notes" class="mb-1 block text-sm font-medium">Additional notes</label>
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="3"
+                            class="w-full rounded border border-gray-700 bg-gray-800 py-2 focus:border-blue-500 focus:outline-none"
+                            placeholder="  Please share anything that will help prepare for our meeting."
+                        ></textarea>
+                    </div>
+
+                    <p class="mt-4 text-xs text-gray-400">
+                        By proceeding, you agree to our <a href="#" class="text-blue-400 hover:underline">Terms</a> and
+                        <a href="#" class="text-blue-400 hover:underline">Privacy Policy</a>.
+                    </p>
+
+                    <div class="mt-6 flex justify-between">
+                        <a href="/host/{{username}}/{{event.id}}">
+                            <button type="button" class="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white">
+                                Back
+                            </button></a
+                        >
+                        <button
+                            type="submit"
+                            class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -30,7 +30,7 @@ async def book_information(id: int, request: Request, session: Session = Depends
         "booking/book_information.html",
         {
             "request": request,
-            "username": current_user,  # temporary fix
+            "user": current_user,  # temporary fix
             "booking": booking,
             "timedelta": timedelta,
             "formated_date": formated_date,
